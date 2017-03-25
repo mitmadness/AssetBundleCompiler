@@ -1,0 +1,8 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "quotemark": ["single"],
+    "trailing-comma": false,
+    "object-literal-sort-keys": false
+  }
+}
