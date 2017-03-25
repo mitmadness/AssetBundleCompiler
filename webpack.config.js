@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const webpackNodeExternals = require('webpack-node-externals');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 
 function root(relunixpath) {
@@ -8,6 +9,10 @@ function root(relunixpath) {
 }
 
 module.exports = {
+    target: 'node',
+
+    externals: [webpackNodeExternals()],
+
     devtool: 'inline-source-map',
 
     resolve: {
