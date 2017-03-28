@@ -16,7 +16,9 @@
     "semantic-release": "semantic-release pre && npm publish --access=public && semantic-release post"
   },
   "devDependencies": {
+    "@types/fs-extra": "^2.0.0",
     "@types/node": "^7.0.11",
+    "@types/pify": "^0.0.28",
     "awesome-typescript-loader": "^3.1.2",
     "semantic-release": "^6.3.2",
     "source-map-support": "^0.4.14",
@@ -25,5 +27,9 @@
     "typescript": "^2.2.1",
     "webpack": "^2.3.2",
     "webpack-node-externals": "^1.5.4"
+  },
+  "dependencies": {
+    "fs-extra": "^2.1.2",
+    "pify": "^2.3.0"
   }
 }

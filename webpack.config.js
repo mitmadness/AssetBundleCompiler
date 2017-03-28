@@ -23,7 +23,6 @@ module.exports = {
 
     output: {
         path: root('dist'),
-        publicPath: '/',
         filename: 'asset-bundle-compiler.umd.js',
         libraryTarget: 'umd',
         library: 'AssetBundleCompiler'
@@ -39,5 +38,9 @@ module.exports = {
             test: /\.ts$/,
             loader: 'awesome-typescript-loader?declaration=false'
         }]
+    },
+
+    node: {
+        __dirname: false
     }
 };
