@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import * as fs from 'fs';
 import * as pify from 'pify';
 
-export let unityBinaryPath = '/opdt/Unity/Editor/Unity';
+export let unityBinaryPath = '/opt/Unity/Editor/Unity';
 
 export function setUnityPath(executablePath: string): void {
     unityBinaryPath = executablePath;
