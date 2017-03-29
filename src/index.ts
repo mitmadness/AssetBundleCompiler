@@ -5,7 +5,7 @@ export function bundle(...files: ReadableFileInput[]): AssetsBundler {
     const bundler = new AssetsBundler();
 
     for (const file of files) {
-        bundler.add(file);
+        bundler.include(file);
     }
 
     return bundler;
