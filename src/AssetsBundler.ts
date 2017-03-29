@@ -38,7 +38,10 @@ export class AssetsBundler {
         return this;
     }
 
-    public async to(file: streamify.WritableFileInput): Promise<void> {
+    public async to(
+        file: streamify.WritableFileInput,
+        { overwrite }: { overwrite: boolean } = { overwrite: true }
+    ): Promise<void> {
         if (!this.buildTarget) {
             throw new Error('You must set a build target by calling for() before calling to().');
         }
@@ -48,7 +51,7 @@ export class AssetsBundler {
         await this.warmupUnityProject();
         await this.copyAssetsToUnityProject();
         await this.generateAssetBundle();
-        await this.moveGeneratedAssetBundle();
+        await this.moveGeneratedAssetBundle(overwrite);
         await this.cleanupUnityProject();
     }
 
@@ -106,12 +109,19 @@ export class AssetsBundler {
         );
     }
 
-    private async moveGeneratedAssetBundle(): Promise<void> {
+    private async moveGeneratedAssetBundle(overwrite: boolean): Promise<void> {
         const assetBundlePath = path.resolve(`${this.tempAssetBundleDir}/assetbundle`);
 
         if (typeof this.finalDest === 'string') {
-            await pify(fs.move)(assetBundlePath, this.finalDest);
+            await pify(fs.move)(assetBundlePath, this.finalDest, { overwrite });
         } else if (streamify.isWriteStream(this.finalDest)) {
+            if (!overwrite) {
+                try {
+                    await pify(fs.access)(this.finalDest.path);
+                    throw new Error(`File ${this.finalDest.path} already exists, overwrite option is false, aborting.`);
+                } finally { /* pass */ }
+            }
+
             const assetBundleStream = fs.createReadStream(assetBundlePath);
 
             return new Promise<void>((resolve, reject) => {
