@@ -7,9 +7,14 @@ Node.js wrapper around Unity3D's BuildPipeline to create AssetBundles programmat
 From the [documentation](https://docs.unity3d.com/Manual/AssetBundlesIntro.html):
 
 > AssetBundles are files which you can export from Unity to contain Assets of your choice, [that] can be loaded on demand by your application. This allows you to stream content, such as models, Textures, audio clips, or even entire Scenes [...].
-> They can contain any kind of Asset type recognized by Unity, as determined by the filename extension. [...] Files with custom binary data should have the extension “.bytes”. Unity will import these files as TextAssets.
 
 ----------------
+
+Working with Unity's CLI and generating asset bundles gives headaches. If you are integrating asset bundle generation in a Node.js server or want a simple tool to do it, AssetBundleCompiler may satisfy you:
+
+```typescript
+await bundle(...assets).for('WebGL').to('/path/to/asset.bundle');
+```
 
 ## Installation & Usage
 
