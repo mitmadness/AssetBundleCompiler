@@ -1,6 +1,18 @@
+<img src="https://github.com/mitmadness/AssetBundleCompiler/raw/master/abcompiler-logo.png" alt="AssetBundleCompiler logo" align="right">
+
 # AssetBundleCompiler
 
 Node.js wrapper around Unity3D's BuildPipeline to create AssetBundles from any files
+
+----------------
+
+## Installation & Usage
+
+// To do
+
+## API
+
+// To do
 
 ## Future scope
 
