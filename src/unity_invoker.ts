@@ -27,14 +27,15 @@ export async function generateAssetBundle(
     });
 }
 
-export async function runUnityProcess(
-    options: { [argName: string]: string|string[] }
-): Promise<void> {
+export async function runUnityProcess(options: { [argName: string]: string|string[] }): Promise<void> {
+    //=> Merge arguments with default arguments
     options = {
         quit: null, batchmode: null,
+        logFile: null, // this makes Unity log to stdout, of course
         ...options
     };
 
+    //=> Generating an argv array from the arguments object
     const argv: string[] = [];
 
     Object.keys(options).forEach((option) => {
@@ -48,14 +49,17 @@ export async function runUnityProcess(
         }
     });
 
+    //=> Check Unity executable existence
     try {
         await pify(fs.access)(unityBinaryPath, fs.constants.X_OK);
     } catch (err) {
         throw new Error(`Unable to execute Unity, make sure ${unityBinaryPath} exists and is executable.`);
     }
 
+    //=> Spawn unity process
     const unityProcess = spawn(unityBinaryPath, argv);
 
+    //=> Watch for the process to terminate, check return code
     return new Promise<void>((resolve, reject) => {
         unityProcess.once('close', close => close === 0
             ? resolve()

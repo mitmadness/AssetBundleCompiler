@@ -6,6 +6,7 @@
     "object-literal-sort-keys": false,
     "arrow-parens": false,
     "no-unused-expression": false,
-    "no-bitwise": false
+    "no-bitwise": false,
+    "comment-format": false
   }
 }
