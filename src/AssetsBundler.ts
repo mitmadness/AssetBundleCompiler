@@ -14,7 +14,7 @@ export class AssetsBundler {
     public include(file: streamMaker.ReadableFileInput): this {
         this.checkBundlerIsntConfigured();
 
-        const fileStream = streamMaker.normalizeReadStream(file)
+        const fileStream = streamMaker.normalizeReadStream(file);
         this.fileStreams.push(fileStream);
 
         return this;

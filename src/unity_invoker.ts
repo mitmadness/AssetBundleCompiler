@@ -1,6 +1,12 @@
 import { spawn } from 'child_process';
+import * as fs from 'fs';
+import * as pify from 'pify';
 
-const UnityBinaryPath = '/opt/Unity/Editor/Unity';
+export let unityBinaryPath = '/opdt/Unity/Editor/Unity';
+
+export function setUnityPath(executablePath: string): void {
+    unityBinaryPath = executablePath;
+}
 
 export async function createProject(directory: string): Promise<void> {
     await runUnityProcess({ createProject: directory });
@@ -21,7 +27,7 @@ export async function generateAssetBundle(
     });
 }
 
-export function runUnityProcess(
+export async function runUnityProcess(
     options: { [argName: string]: string|string[] }
 ): Promise<void> {
     options = {
@@ -42,7 +48,13 @@ export function runUnityProcess(
         }
     });
 
-    const unityProcess = spawn(UnityBinaryPath, argv);
+    try {
+        await pify(fs.access)(unityBinaryPath, fs.constants.X_OK);
+    } catch (err) {
+        throw new Error(`Unable to execute Unity, make sure ${unityBinaryPath} exists and is executable.`);
+    }
+
+    const unityProcess = spawn(unityBinaryPath, argv);
 
     return new Promise<void>((resolve, reject) => {
         unityProcess.once('close', close => close === 0

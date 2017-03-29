@@ -1,6 +1,9 @@
 import { AssetsBundler } from './AssetsBundler';
 import { ReadableFileInput } from './stream_maker';
 
+export * from './AssetsBundler';
+export { setUnityPath } from './unity_invoker';
+
 export function bundle(...files: ReadableFileInput[]): AssetsBundler {
     const bundler = new AssetsBundler();
 
