@@ -1,8 +1,13 @@
 <img src="https://github.com/mitmadness/AssetBundleCompiler/raw/master/abcompiler-logo.png" alt="AssetBundleCompiler logo" align="right">
 
-# AssetBundleCompiler
+# [AssetBundle](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)Compiler
 
-Node.js wrapper around Unity3D's BuildPipeline to create AssetBundles from any files
+Node.js wrapper around Unity3D's BuildPipeline to create AssetBundles programmatically from any files, in order to simplify and automatize your workflow.
+
+From the [documentation](https://docs.unity3d.com/Manual/AssetBundlesIntro.html):
+
+> AssetBundles are files which you can export from Unity to contain Assets of your choice, [that] can be loaded on demand by your application. This allows you to stream content, such as models, Textures, audio clips, or even entire Scenes [...].
+> They can contain any kind of Asset type recognized by Unity, as determined by the filename extension. [...] Files with custom binary data should have the extension “.bytes”. Unity will import these files as TextAssets.
 
 ----------------
 
