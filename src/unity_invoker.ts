@@ -10,6 +10,8 @@ interface IArgvObject {
     [argName: string]: string|string[];
 }
 
+const noop = () => {}; // tslint:disable-line:no-empty
+
 export let unityBinaryPath = '/opt/Unity/Editor/Unity';
 
 export function setUnityPath(executablePath: string): void {
@@ -26,18 +28,24 @@ export async function generateAssetBundle(
     cAssetNames: string[],
     cAssetBundleDirectory: string,
     cAssetBundleName: string,
-    cAssetBundleTarget: string
+    cAssetBundleTarget: string,
+    signalAssetProcessed: (assetPath: string) => void = noop
 ) {
     await runUnityProcess({
         projectPath: directory,
         executeMethod: 'AssetBundleCompiler.Convert',
         cTempAssetsDirectory, cAssetNames, cAssetBundleDirectory, cAssetBundleName, cAssetBundleTarget
+    }, (message) => {
+        const matches = message.match(/^Updating Assets\/CopiedAssets-[0-9]+\/(.+?)(?= - GUID)/);
+        if (matches !== null) {
+            signalAssetProcessed(matches[1]);
+        }
     });
 }
 
 async function runUnityProcess(
     options: IArgvObject,
-    logger: StdoutLogger = () => {} // tslint:disable-line:no-empty
+    logger: StdoutLogger = noop
 ): Promise<void> {
     //=> Check Unity executable existence
     try {
