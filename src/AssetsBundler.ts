@@ -51,21 +51,32 @@ export class AssetsBundler {
 
         const buildContext = new BuildContext();
 
+        //=> Create project and temporary "sub project"
+        //---------------------------------------------
         this.logger('Warmuping Unity project...');
         await unityproj.warmupProject(buildContext);
 
+        //=> Copy original assets into the project (Unity limitation)
+        //-----------------------------------------------------------
         this.logger('Copying assets...');
         await unityproj.copyAssetsToProject(buildContext, this.fileStreams);
 
+        //=> Generate the asset bundle, then move it to the right place
+        //-------------------------------------------------------------
         this.logger('Generating asset bundle...');
-        await unityproj.generateAssetBundle(buildContext, this.fileStreams, this.buildTarget);
+        const logAssetImported = (asset: string) => this.logger(`Updating resource: ${asset}`);
+
+        await unityproj.generateAssetBundle(buildContext, this.fileStreams, this.buildTarget, logAssetImported);
         await unityproj.moveGeneratedAssetBundle(buildContext, this.finalDest, overwrite);
 
+        //=> Clean temporary "sub project" folders
+        //----------------------------------------
         this.logger('Cleaning up the Unity project...');
         await unityproj.cleanupProject(buildContext);
 
+        //=> OK.
+        //------
         this.state = BundlerState.Dead;
-
         this.logger('Done.');
     }
 

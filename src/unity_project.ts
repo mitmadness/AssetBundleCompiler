@@ -60,7 +60,8 @@ export async function copyAssetsToProject(context: BuildContext, fileStreams: fs
 export async function generateAssetBundle(
     context: BuildContext,
     fileStreams: fs.ReadStream[],
-    buildTarget: BuildTarget
+    buildTarget: BuildTarget,
+    signalAssetProcessed?: (assetPath: string) => void
 ): Promise<void> {
     const assetNames = fileStreams.map(fileStream => path.basename(fileStream.path as string));
 
@@ -70,7 +71,8 @@ export async function generateAssetBundle(
         assetNames,
         context.assetBundleDir,
         'assetbundle',
-        buildTarget
+        buildTarget,
+        signalAssetProcessed
     );
 }
 
