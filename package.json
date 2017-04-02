@@ -5,28 +5,23 @@
   "repository": "git@github.com:toverux/AssetBundleCompiler.git",
   "author": "Morgan Touverey Quilling <mtouverey@methodinthemadness.eu>",
   "license": "MIT",
-  "main": "dist/asset-bundle-compiler.umd.js",
-  "module": "dist/types+esm/index.js",
-  "types": "dist/types+esm/index.d.ts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
-    "build": "yarn tsc-build && yarn webpack-build",
-    "tsc-build": "tsc",
-    "webpack-build": "webpack",
-    "webpack-watch": "yarn webpack-build -- --watch",
-    "semantic-release": "semantic-release pre && npm publish --access=public && semantic-release post"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "semantic-release": "semantic-release pre && npm publish --access=public && semantic-release post",
+    "test": "mocha"
   },
   "devDependencies": {
     "@types/fs-extra": "^2.0.0",
+    "@types/mocha": "^2.2.40",
     "@types/node": "^7.0.11",
     "@types/pify": "^0.0.28",
-    "awesome-typescript-loader": "^3.1.2",
+    "mocha": "^3.2.0",
     "semantic-release": "^6.3.2",
-    "source-map-support": "^0.4.14",
     "tslint": "^4.5.1",
-    "tslint-loader": "^3.4.3",
-    "typescript": "^2.2.1",
-    "webpack": "^2.3.2",
-    "webpack-node-externals": "^1.5.4"
+    "typescript": "^2.2.1"
   },
   "dependencies": {
     "fs-extra": "^2.1.2",

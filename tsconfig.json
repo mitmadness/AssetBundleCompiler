@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "module": "es2015",
-    "target": "es5",
+    "module": "commonjs",
+    "target": "es2016",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
     "moduleResolution": "node",
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noImplicitAny": true,
-    "lib": ["es7"],
-    "outDir": "dist/types+esm"
+    "lib": ["es7"]
   },
   "exclude": ["node_modules", "dist"]
 }
