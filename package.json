@@ -5,19 +5,21 @@
   "repository": "git@github.com:toverux/AssetBundleCompiler.git",
   "author": "Morgan Touverey Quilling <mtouverey@methodinthemadness.eu>",
   "license": "MIT",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "semantic-release": "semantic-release pre && npm publish --access=public && semantic-release post",
-    "test": "mocha"
+    "test": "mocha dist/test/**/*.js"
   },
   "devDependencies": {
+    "@types/chai": "^3.4.35",
     "@types/fs-extra": "^2.0.0",
     "@types/mocha": "^2.2.40",
     "@types/node": "^7.0.11",
     "@types/pify": "^0.0.28",
+    "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "semantic-release": "^6.3.2",
     "tslint": "^4.5.1",

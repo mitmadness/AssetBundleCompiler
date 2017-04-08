@@ -13,7 +13,7 @@ export type BuildTarget =
     'PS4'|'PSM'|'XboxOne'|'SamsungTV'|'N3DS'|'WiiU'|'tvOS'|'Switch';
 
 export const ProjectDirectory = path.join(os.tmpdir(), 'AssetBundleCompiler');
-const CompilerScriptSource = path.resolve(`${__dirname}/../resources/AssetBundleCompiler.cs`);
+const CompilerScriptSource = path.resolve(`${__dirname}/../../resources/AssetBundleCompiler.cs`);
 const CompilerScriptDest = path.resolve(`${ProjectDirectory}/Assets/Editor/AssetBundleCompiler.cs`);
 
 export async function shouldCreateProject(): Promise<boolean> {
