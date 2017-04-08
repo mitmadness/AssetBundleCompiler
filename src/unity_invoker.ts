@@ -56,7 +56,7 @@ async function runUnityProcess(
 
     //=> Merge arguments with default arguments
     options = {
-        quit: null, batchmode: null,
+        quit: null, batchmode: null, nographics: null,
         logFile: null, // this makes Unity log to stdout, of course
         ...options
     };
