@@ -33,3 +33,4 @@ await bundle(...assets).for('WebGL').to('/path/to/asset.bundle');
  - When generating multiple ABs, handle multiple temporary projects to exploit multi-cores CPUs better.
  - CLI interface
  - Web interface
+ - Catch process termination signals to cleanup the temporary project
