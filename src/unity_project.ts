@@ -2,15 +2,12 @@ import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
 import * as pify from 'pify';
+import * as buildTargets from './build_targets';
 import { BuildContext } from './BuildContext';
 import * as streamMaker from './stream_maker';
 import * as unity from './unity_invoker';
 
-export type BuildTarget =
-    'BB10'|'MetroPlayer'|'iPhone'|'StandaloneOSXUniversal'|'StandaloneOSXIntel'|'StandaloneWindows'|'WebPlayer'|
-    'WebPlayerStreamed'|'iOS'|'PS3'|'XBOX360'|'Android'|'StandaloneLinux'|'StandaloneWindows64'|'WebGL'|'WSAPlayer'|
-    'StandaloneLinux64'|'StandaloneLinuxUniversal'|'WP8Player'|'StandaloneOSXIntel64'|'BlackBerry'|'Tizen'|'PSP2'|
-    'PS4'|'PSM'|'XboxOne'|'SamsungTV'|'N3DS'|'WiiU'|'tvOS'|'Switch';
+export type BuildTarget = (keyof typeof buildTargets)|string;
 
 export const ProjectDirectory = path.join(os.tmpdir(), 'AssetBundleCompiler');
 const CompilerScriptSource = path.resolve(`${__dirname}/../../resources/AssetBundleCompiler.cs`);
