@@ -16,6 +16,15 @@ Working with Unity's CLI and generating asset bundles gives headaches. If you ar
 await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 ```
 
+ - [Installation & Usage](#installation--usage)
+ - [Simple, fluent API](#simple-fluent-api)
+ - Notes
+    - [Changing Unity's executable path](#changing-unitys-executable-path)
+    - [Unity activation](#unity-activation)
+    - [Future scope](#future-scope)
+
+----------------
+
 ## Installation & Usage
 
 > **AssetBundleCompiler is not production-ready and is not published on npm yet.**
