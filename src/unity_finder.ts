@@ -4,7 +4,7 @@ import * as pify from 'pify';
 const candidateUnityPaths = [
     '/opt/Unity/Editor/Unity', // Debian / Ubuntu
     '/Applications/Unity/Unity.app/Contents/MacOS/Unity', // MacOS
-    'C:\\Program Files x86)\\Unity\\Editor\\Unity.exe', // Windows x86
+    'C:\\Program Files (x86)\\Unity\\Editor\\Unity.exe', // Windows x86
     'C:\\Program Files\\Unity\\Editor\\Unity.exe' // Windows x64
 ];
 

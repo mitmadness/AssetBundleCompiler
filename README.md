@@ -48,7 +48,7 @@ By default, _AssetBundleCompiler_ will try to find Unity's executable on the exp
 
  - `/opt/Unity/Editor/Unity` – Debian / Ubuntu [with the official .deb package](https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/)
  - `/Applications/Unity/Unity.app/Contents/MacOS/Unity` – MacOS
- - `C:\Program Files x86)\Unity\Editor\Unity.exe` – Windows, Unity x86
+ - `C:\Program Files (x86)\Unity\Editor\Unity.exe` – Windows, Unity x86
  - `C:\Program Files\Unity\Editor\Unity.exe` – Windows, Unity x64
 
 If you have a custom installation of Unity on a "non-standard" path (ie. you have multiple versions installed), you can tell _AssetBundleCompiler_ where to look:
