@@ -18,9 +18,30 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 ## Installation & Usage
 
+**AssetBundleCompiler is not production-ready and is not published on npm yet.**
+
+## Fluent API
+
 // To do
 
-## API
+## Notes
+
+### Changing Unity's executable path
+
+By default, _AssetBundleCompiler_ will try to find Unity's executable on the expected locations depending on your platform.
+
+For example, if you use the official Debian package build of Unity, the library will use `/opt/Unity/Editor/Unity`.
+
+If you have a custom installation of Unity on a "non-standard" path, you can tell _AssetBundleCompiler_ where to look:
+
+```typescript
+import { setUnityPath } from '@mitm/assetbundlecompiler';
+
+// given that you define the environment variable UNITY_EDITOR_PATH, to avoid hardcoded path:
+setUnityPath(process.env.UNITY_EDITOR_PATH);
+```
+
+### Unity activation
 
 // To do
 
