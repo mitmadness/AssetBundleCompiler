@@ -70,7 +70,8 @@ setUnityPath(process.env.UNITY_EDITOR_PATH);
  - Implement a StreamWriter interface?
  - Implement a vinyl/Gulp-compatible interface?
  - Generate multiple asset bundles at the time, spawning only one Unity process.
- - When generating multiple ABs, handle multiple temporary projects to exploit multi-cores CPUs better.
+ - When generating multiple ABs at the same time, handle multiple temporary projects to exploit multi-cores CPUs better.
  - CLI interface
  - Web interface
- - Catch process termination signals to cleanup the temporary project
+ - Catch process termination signals and errors to cleanup the temporary project
+ - Support generating multiple AssetBundle with different build targets at a time
