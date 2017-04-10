@@ -13,7 +13,7 @@ From the [documentation](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)
 Working with Unity's CLI and generating asset bundles gives headaches. If you are integrating asset bundle generation in a Node.js server or want a simple tool to do it, AssetBundleCompiler may satisfy you:
 
 ```typescript
-await bundle(...assets).for('WebGL').to('/path/to/asset.bundle');
+await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 ```
 
 ## Installation & Usage
