@@ -1,5 +1,5 @@
 {
-  "name": "@toverux/asset-bundle-compiler",
+  "name": "@mitm/assetbundlecompiler",
   "version": "0.1.0",
   "description": "Node.js wrapper around Unity3D's BuildPipeline to create AssetBundles from any files",
   "repository": "git@github.com:toverux/AssetBundleCompiler.git",
