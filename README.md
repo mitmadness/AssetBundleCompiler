@@ -18,9 +18,16 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 ## Installation & Usage
 
-**AssetBundleCompiler is not production-ready and is not published on npm yet.**
+> **AssetBundleCompiler is not production-ready and is not published on npm yet.**
 
-## Fluent API
+**Requirements:**
+
+ - Node.js, version 7 preferred
+ - **An _activated_ installation of Unity on the machine:**
+    - If Unity is not installed in the standard path, read [Changing Unity's executable path](#changing-unitys-executable-path)
+    - You must activate Unity if not already done, even with a free plan, read [Unity activation](#unity-activation)
+
+## Simple, fluent API
 
 // To do
 
@@ -28,11 +35,14 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 ### Changing Unity's executable path
 
-By default, _AssetBundleCompiler_ will try to find Unity's executable on the expected locations depending on your platform.
+By default, _AssetBundleCompiler_ will try to find Unity's executable on the expected locations. The library will look at the following paths:
 
-For example, if you use the official Debian package build of Unity, the library will use `/opt/Unity/Editor/Unity`.
+ - `/opt/Unity/Editor/Unity` – Debian / Ubuntu [with the official .deb package](https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/)
+ - `/Applications/Unity/Unity.app/Contents/MacOS/Unity` – MacOS
+ - `C:\Program Files x86)\Unity\Editor\Unity.exe` – Windows, Unity x86
+ - `C:\Program Files\Unity\Editor\Unity.exe` – Windows, Unity x64
 
-If you have a custom installation of Unity on a "non-standard" path, you can tell _AssetBundleCompiler_ where to look:
+If you have a custom installation of Unity on a "non-standard" path (ie. you have multiple versions installed), you can tell _AssetBundleCompiler_ where to look:
 
 ```typescript
 import { setUnityPath } from '@mitm/assetbundlecompiler';
@@ -45,7 +55,7 @@ setUnityPath(process.env.UNITY_EDITOR_PATH);
 
 // To do
 
-## Future scope
+### Future scope
 
  - Stop relying on `fs.ReadStream` and `fs.WriteStream` on the public API, and use normal streams.
  - Implement a StreamWriter interface?
