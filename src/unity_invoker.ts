@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as pify from 'pify';
+import { getUnityPath } from './unity_finder';
 
 type StdoutLogger = (message: string) => void;
 
@@ -11,12 +12,6 @@ interface IArgvObject {
 }
 
 const noop = () => {}; // tslint:disable-line:no-empty
-
-export let unityBinaryPath = '/opt/Unity/Editor/Unity';
-
-export function setUnityPath(executablePath: string): void {
-    unityBinaryPath = executablePath;
-}
 
 export async function createProject(directory: string): Promise<void> {
     await runUnityProcess({ createProject: directory });
@@ -47,13 +42,6 @@ async function runUnityProcess(
     options: IArgvObject,
     logger: StdoutLogger = noop
 ): Promise<void> {
-    //=> Check Unity executable existence
-    try {
-        await pify(fs.access)(unityBinaryPath, fs.constants.X_OK);
-    } catch (err) {
-        throw new Error(`Unable to execute Unity, make sure ${unityBinaryPath} exists and is executable.`);
-    }
-
     //=> Merge arguments with default arguments
     options = {
         quit: null, batchmode: null, nographics: null,
@@ -64,8 +52,8 @@ async function runUnityProcess(
     //=> Generating an argv array from the arguments object
     const argv = toArgv(options);
 
-    //=> Spawn unity process
-    const unityProcess = spawn(unityBinaryPath, argv);
+    //=> Spawn Unity process
+    const unityProcess = spawn(await getUnityPath(), argv);
 
     //=> Watch process' stdout to log in real time, and keep the complete output in case of crash
     let stdoutAggregator = '';
