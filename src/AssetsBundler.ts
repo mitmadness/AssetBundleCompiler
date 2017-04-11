@@ -51,33 +51,52 @@ export class AssetsBundler {
 
         const buildContext = new BuildContext();
 
-        //=> Create project and temporary "sub project"
-        //---------------------------------------------
-        this.logger('Warmuping Unity project...');
-        await unityproj.warmupProject(buildContext);
+        const signalCleanup = this.signalCleanup.bind(this, buildContext);
+        process.on('SIGINT', signalCleanup);
+        process.on('SIGTERM', signalCleanup);
 
-        //=> Copy original assets into the project (Unity limitation)
-        //-----------------------------------------------------------
-        this.logger('Copying assets...');
-        await unityproj.copyAssetsToProject(buildContext, this.fileStreams);
+        try {
+            //=> Create project and temporary "sub project"
+            //---------------------------------------------
+            this.logger('Warmuping Unity project...');
+            await unityproj.warmupProject(buildContext);
 
-        //=> Generate the asset bundle, then move it to the right place
-        //-------------------------------------------------------------
-        this.logger('Generating asset bundle...');
-        const logAssetImported = (asset: string) => this.logger(`Updating resource: ${asset}`);
+            //=> Copy original assets into the project (Unity limitation)
+            //-----------------------------------------------------------
+            this.logger('Copying assets...');
+            await unityproj.copyAssetsToProject(buildContext, this.fileStreams);
 
-        await unityproj.generateAssetBundle(buildContext, this.fileStreams, this.buildTarget, logAssetImported);
-        await unityproj.moveGeneratedAssetBundle(buildContext, this.finalDest, overwrite);
+            //=> Generate the asset bundle, then move it to the right place
+            //-------------------------------------------------------------
+            this.logger('Generating asset bundle...');
+            const logAssetImported = (asset: string) => this.logger(`Updating resource: ${asset}`);
 
-        //=> Clean temporary "sub project" folders
-        //----------------------------------------
-        this.logger('Cleaning up the Unity project...');
-        await unityproj.cleanupProject(buildContext);
+            await unityproj.generateAssetBundle(buildContext, this.fileStreams, this.buildTarget, logAssetImported);
+            await unityproj.moveGeneratedAssetBundle(buildContext, this.finalDest, overwrite);
+        } finally {
+            process.removeListener('SIGINT', signalCleanup);
+            process.removeListener('SIGTERM', signalCleanup);
+
+            //=> Clean temporary "sub project" folders
+            //----------------------------------------
+            await this.cleanup(buildContext);
+        }
 
         //=> OK.
         //------
         this.state = BundlerState.Dead;
         this.logger('Done.');
+    }
+
+    private async cleanup(context: BuildContext): Promise<void> {
+        this.logger('Cleaning up the Unity project...');
+        await unityproj.cleanupProject(context);
+    }
+
+    private async signalCleanup(context: BuildContext): Promise<void> {
+        await this.logger('AssetBundle conversion cancelled by user!');
+        await this.cleanup(context);
+        process.exit(0);
     }
 
     private logger(message: string): void {
