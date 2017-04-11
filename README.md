@@ -25,14 +25,18 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 ## Installation & Usage
 
-> **AssetBundleCompiler is not production-ready and is not published on npm yet.**
-
 **Requirements:**
 
  - Node.js, version 7 preferred
  - **An _activated_ installation of Unity on the machine:**
     - If Unity is not installed in the standard path, read [Changing Unity's executable path](#changing-unitys-executable-path)
     - You must activate Unity if not already done, even with a free plan, read [Unity activation](#unity-activation)
+
+Install it via the npm registry:
+
+```typescript
+yarn add @mitm/assetbundlecompiler
+```
 
 ## Simple, fluent API
 
