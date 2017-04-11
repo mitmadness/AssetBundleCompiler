@@ -109,5 +109,12 @@ setUnityPath(process.env.UNITY_EDITOR_PATH);
 
 ### Unity activation
 
-// To do
+Unity is a proprietary software that requires to be activated with a valid account, even if that's not necessary for building asset bundles. This library does not handle activation, meaning that you _must_ already have an activated version of Unity on the machine.
 
+**Building asset bundles, does not requires a paid account.** You can log in with your free _Personal_ license.
+
+Activation via Unity's CLI is possible too (for automating installation for example) but is somewhat broken from times to times, and **does not works with personal licenses**. So, given you have a paid accound, you can do:
+
+```
+~$ /path/to/Unity -quit -batchmode -serial SB-XXXX-XXXX-XXXX-XXXX-XXXX -username 'JoeBloggs@example.com' -password 'MyPassw0rd'
+```
