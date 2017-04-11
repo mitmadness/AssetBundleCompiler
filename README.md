@@ -19,6 +19,7 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
  - [Installation & Usage](#installation--usage)
  - [Simple, fluent API](#simple-fluent-api)
  - Notes
+    - [Error handling](#error-handling)
     - [Changing Unity's executable path](#changing-unitys-executable-path)
     - [Unity activation](#unity-activation)
     - [Future scope](#future-scope)
@@ -41,6 +42,24 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 // To do
 
 ## Notes
+
+### Error handling
+
+> What could possibly go wrong?
+
+_AssetBundleCompiler_ will catch abnormal Unity process termination and throw an error in that case (and performs a rapid cleanup).
+The error is an instance of `UnityCrashError` (exported on the main module) and its prototype looks like:
+
+```typescript
+class UnityCrashError extends Error {
+    public readonly message: string; // Exception message
+    public readonly unityLog: string; // Unity Editor log (contains crash information)
+}
+```
+
+The logs will also be dumped to you system temporary folder (ie. /tmp) in a file named `unity_crash.abcompiler.log` (the complete path will be reported in the error's message).
+
+Please note that SIGINT and SIGTERM signals are also catched and the same cleanup is performed.
 
 ### Changing Unity's executable path
 
