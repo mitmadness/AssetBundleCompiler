@@ -9,6 +9,7 @@
     "moduleResolution": "node",
     "noUnusedLocals": false,
     "noImplicitAny": true,
+    "strictNullChecks": true,
     "lib": ["es7"]
   },
   "exclude": ["node_modules", "dist"]

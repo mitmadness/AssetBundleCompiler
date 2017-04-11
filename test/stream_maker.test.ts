@@ -45,7 +45,7 @@ describe('stream_maker', () => {
         });
 
         it('should throw when encountering something other than a string or write stream', () => {
-            expect(() => { streamMaker.normalizeWriteStream(null); }).to.throw();
+            expect(() => { streamMaker.normalizeWriteStream(null as any); }).to.throw();
             expect(() => { streamMaker.normalizeWriteStream(42 as any); }).to.throw();
             expect(() => { streamMaker.normalizeWriteStream(String as any); }).to.throw();
         });
@@ -63,7 +63,7 @@ describe('stream_maker', () => {
         });
 
         it('should throw when encountering something other than a string or read stream', () => {
-            expect(() => { streamMaker.normalizeReadStream(null); }).to.throw();
+            expect(() => { streamMaker.normalizeReadStream(null as any); }).to.throw();
             expect(() => { streamMaker.normalizeReadStream(42 as any); }).to.throw();
             expect(() => { streamMaker.normalizeReadStream(String as any); }).to.throw();
         });

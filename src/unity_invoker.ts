@@ -8,7 +8,7 @@ import { getUnityPath } from './unity_finder';
 type StdoutLogger = (message: string) => void;
 
 interface IArgvObject {
-    [argName: string]: string|string[];
+    [argName: string]: string|string[]|null;
 }
 
 const noop = () => {}; // tslint:disable-line:no-empty
