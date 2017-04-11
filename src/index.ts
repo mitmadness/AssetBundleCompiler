@@ -4,6 +4,7 @@ import { ReadableFileInput } from './stream_maker';
 
 export * from './AssetsBundler';
 export { setUnityPath } from './unity_finder';
+export { UnityCrashError } from './unity_invoker';
 export { BuildTargets };
 
 export function bundle(...files: ReadableFileInput[]): AssetsBundler {
