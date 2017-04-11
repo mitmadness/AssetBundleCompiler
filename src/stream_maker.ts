@@ -25,10 +25,10 @@ export function normalizeWriteStream(file: WritableFileInput) {
 
 export function isReadStream(file: ReadableFileInput): file is fs.ReadStream {
     const stream = file as fs.ReadStream;
-    return stream.path !== undefined && stream.bytesRead !== undefined;
+    return !!(stream && stream.path !== undefined && stream.bytesRead !== undefined);
 }
 
 export function isWriteStream(file: WritableFileInput): file is fs.WriteStream {
     const stream = file as fs.WriteStream;
-    return stream.path !== undefined && stream.bytesWritten !== undefined;
+    return !!(stream && stream.path !== undefined && stream.bytesWritten !== undefined);
 }
