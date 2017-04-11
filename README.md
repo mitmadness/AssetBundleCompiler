@@ -34,7 +34,7 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 Install it via the npm registry:
 
-```typescript
+```
 yarn add @mitm/assetbundlecompiler
 ```
 
