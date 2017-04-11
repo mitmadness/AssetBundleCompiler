@@ -36,7 +36,38 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 ## Simple, fluent API
 
-// To do
+```typescript
+import { BuildTargets, bundle } from '@mitm/assetbundlecompiler';
+
+const { WebGL } = BuildTargets;
+
+await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
+    // .for() is mandatory and tells the library what platform your asset bundle targets.
+    // You can either pass a predefined constant in BuildTargets, or a string,
+    // matching the name of a member of the UnityEditor.BuildTarget enum.
+    // @see https://docs.unity3d.com/ScriptReference/BuildTarget.html
+    .for(WebGL)
+    
+    // This lets you define a simple logger to get simple text updates about the conversion.
+    .withLogger(message => console.log(message))
+    
+    // This is the "run" function and marks the termination of the fluent calls
+    // by returning a Promise that resolves when the asset bundle generation ends.
+    // Give it a path to the asset bundle name or a fs.WriteStream.
+    .to('/abs/path/to/assetbundle.bin');
+```
+
+(Not recommended) `bundle()` is the normal entry function but you can also use directly the underlying `AssetsBundler` class:
+
+```typescript
+const bundler = new AssetsBundler();
+
+await bundler
+    .include('/abs/path/to/fbx')
+    .include('/abs/path/to/texture')
+    .for(WebGL)
+    .to('/abs/path/to/assetbundle.bin');
+```
 
 ## Notes
 
