@@ -23,12 +23,12 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
 ----------------
 
-## Installation & Usage
+## :package: Installation & Usage
 
 **Requirements:**
 
  - Node.js, version 7 preferred
- - **An _activated_ installation of Unity on the machine:**
+ - :warning: **An _activated_ installation of Unity on the machine** :warning:
     - If Unity is not installed in the standard path, read [Changing Unity's executable path](#changing-unitys-executable-path)
     - You must activate Unity if not already done, even with a free plan, read [Unity activation](#unity-activation)
 
@@ -38,7 +38,7 @@ Install it via the npm registry:
 yarn add @mitm/assetbundlecompiler
 ```
 
-## Simple, fluent API
+## :link: Simple, fluent API
 
 ```typescript
 import { BuildTargets, bundle } from '@mitm/assetbundlecompiler';
@@ -73,7 +73,7 @@ await bundler
     .to('/abs/path/to/assetbundle.bin');
 ```
 
-## Notes
+## :bulb: Notes
 
 ### Error handling
 
