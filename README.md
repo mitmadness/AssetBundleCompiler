@@ -18,11 +18,8 @@ await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
 
  - [Installation & Usage](#installation--usage)
  - [Simple, fluent API](#simple-fluent-api)
- - Notes
-    - [Error handling](#error-handling)
-    - [Changing Unity's executable path](#changing-unitys-executable-path)
-    - [Unity activation](#unity-activation)
-    - [Future scope](#future-scope)
+ - Notes:
+   [Error handling](#error-handling), [Changing Unity's executable path](#changing-unitys-executable-path), [Unity activation](#unity-activation), [Future scope](https://github.com/mitmadness/AssetBundleCompiler/projects/1)
 
 ----------------
 
@@ -83,14 +80,3 @@ setUnityPath(process.env.UNITY_EDITOR_PATH);
 
 // To do
 
-### Future scope
-
- - Stop relying on `fs.ReadStream` and `fs.WriteStream` on the public API, and use normal streams.
- - Implement a StreamWriter interface?
- - Implement a vinyl/Gulp-compatible interface?
- - Generate multiple asset bundles at the time, spawning only one Unity process.
- - When generating multiple ABs at the same time, handle multiple temporary projects to exploit multi-cores CPUs better.
- - CLI interface
- - Web interface
- - Catch process termination signals and errors to cleanup the temporary project
- - Support generating multiple AssetBundle with different build targets at a time
