@@ -25,6 +25,10 @@ export class AssetsBundler {
     public for(buildTarget: unityproj.BuildTarget): this {
         this.checkBundlerIsntConfigured();
 
+        if (typeof buildTarget !== 'string') {
+            throw new Error('buildTarget cannot be null');
+        }
+
         this.buildTarget = buildTarget;
 
         return this;
