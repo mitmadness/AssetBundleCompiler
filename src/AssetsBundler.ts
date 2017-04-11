@@ -30,7 +30,7 @@ export class AssetsBundler {
         return this;
     }
 
-    public loggingWith(loggerFunction: Logger): this {
+    public withLogger(loggerFunction: Logger): this {
         this.checkBundlerIsntConfigured();
 
         this.logger = loggerFunction;
