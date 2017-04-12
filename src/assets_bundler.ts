@@ -102,17 +102,17 @@ export class AssetsBundler {
         try {
             //=> Create project and temporary "sub project"
             //---------------------------------------------
-            this.logger('Preparing Unity project...');
+            this.logger(`Preparing Unity project in ${buildContext.projectRootDir}`);
             await unityproj.warmupProject(buildContext);
 
             //=> Copy original assets into the project (Unity limitation)
             //-----------------------------------------------------------
-            this.logger('Copying assets...');
+            this.logger(`Copying assets to ${buildContext.assetsDir}`);
             await unityproj.copyAssetsToProject(buildContext, this.fileStreams);
 
             //=> Generate the asset bundle
             //----------------------------
-            this.logger('Generating asset bundle...');
+            this.logger(`Generating asset bundle in ${buildContext.assetBundleDir}`);
 
             await unityproj.generateAssetBundle(
                 buildContext,
@@ -124,6 +124,7 @@ export class AssetsBundler {
 
             //=> Move the generated asset bundle to the final dest
             //----------------------------------------------------
+            this.logger(`Moving asset bundle to target destination`);
             await unityproj.moveGeneratedAssetBundle(buildContext, this.finalDest, overwrite);
         } finally {
             //=> Success or error doesn't matter, we have to cleanup!
@@ -141,7 +142,7 @@ export class AssetsBundler {
     }
 
     private async cleanup(context: BuildContext): Promise<void> {
-        this.logger('Cleaning up the Unity project...');
+        this.logger('Cleaning up the Unity project');
         await unityproj.cleanupProject(context);
     }
 
