@@ -26,7 +26,7 @@ export class AssetsBundler {
         this.checkBundlerIsntConfigured();
 
         if (typeof buildTarget !== 'string') {
-            throw new Error('buildTarget cannot be null');
+            throw new Error('buildTarget must be a string (member name of an UnityEngine.BuildTarget enum).');
         }
 
         this.buildTarget = buildTarget;
@@ -36,6 +36,10 @@ export class AssetsBundler {
 
     public withLogger(loggerFunction: Logger): this {
         this.checkBundlerIsntConfigured();
+
+        if (typeof loggerFunction !== 'function') {
+            throw new Error('loggerFunction must be a function.');
+        }
 
         this.logger = loggerFunction;
 
