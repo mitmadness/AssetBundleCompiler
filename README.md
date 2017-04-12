@@ -52,6 +52,10 @@ await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
     // @see https://docs.unity3d.com/ScriptReference/BuildTarget.html
     .for(WebGL)
     
+    // Lets you define build options. Those are always flags, and the key names represent
+    // member names of the UnityEditor.BuildAssetBundleOptions enum.
+    .withBuildOptions({ chunkBasedCompression: true, strictMode: true, /* etc */ })
+    
     // This lets you define a simple logger to get simple text updates about the conversion.
     .withLogger(message => console.log(message))
     
