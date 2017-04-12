@@ -11,7 +11,7 @@ export function bundle(...files: ReadableFileInput[]): AssetsBundler {
     const bundler = new AssetsBundler();
 
     for (const file of files) {
-        bundler.include(file);
+        bundler.including(file);
     }
 
     return bundler;

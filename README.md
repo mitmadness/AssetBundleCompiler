@@ -45,6 +45,10 @@ import { BuildTargets, bundle } from '@mitm/assetbundlecompiler';
 
 const { WebGL } = BuildTargets;
 
+// bundle() is the entry function to the API.
+// Pass a list of assets to bundle into the resulting asset bundle.
+// Those assets could be anywhere on the filesystem.
+// To pass an array of paths, use bundle(...paths) syntax.
 await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
     // .for() is mandatory and tells the library what platform your asset bundle targets.
     // You can either pass a predefined constant in BuildTargets, or a string,
@@ -72,8 +76,8 @@ await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
 const bundler = new AssetsBundler();
 
 await bundler
-    .include('/abs/path/to/fbx')
-    .include('/abs/path/to/texture')
+    .including('/abs/path/to/fbx')
+    .including('/abs/path/to/texture')
     .for(WebGL)
     .to('/abs/path/to/assetbundle.bin');
 ```

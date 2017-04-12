@@ -39,7 +39,7 @@ export class AssetsBundler {
     private finalDest: string|fs.WriteStream;
     private state = BundlerState.Configuring;
 
-    public include(file: streamMaker.ReadableFileInput): this {
+    public including(file: streamMaker.ReadableFileInput): this {
         this.checkBundlerIsntConfigured();
 
         const fileStream = streamMaker.normalizeReadStream(file);
