@@ -1,8 +1,8 @@
-import { AssetsBundler } from './AssetsBundler';
+import { AssetsBundler } from './assets_bundler';
 import * as BuildTargets from './build_targets';
 import { ReadableFileInput } from './stream_maker';
 
-export * from './AssetsBundler';
+export * from './assets_bundler';
 export { setUnityPath } from './unity_finder';
 export { UnityCrashError } from './unity_invoker';
 export { BuildTargets };

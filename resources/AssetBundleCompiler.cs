@@ -15,6 +15,7 @@ public static class AssetBundleCompiler
         var assetNames = args["cAssetNames"];
         var assetBundleDirectory = args["cAssetBundleDirectory"][0];
         var assetBundleName = args["cAssetBundleName"][0];
+        var assetBundleBuildOptions = args["cAssetBundleBuildOptions"];
         var assetBundleTargetName = args["cAssetBundleTarget"][0];
 
         //=> Parametrize our build
@@ -27,16 +28,31 @@ public static class AssetBundleCompiler
 
         var builds = new[] { build };
 
+        //=> Convert build options strings to a BuildAssetBundleOptions mask
+        var buildOptions = GetBuildOptionsMaskFromStrings(assetBundleBuildOptions);
+
         //=> Convert build target name to Unity's BuildTarget enum
-        BuildTarget buildTarget;
-        try {
-            buildTarget = (BuildTarget)Enum.Parse(typeof(BuildTarget), assetBundleTargetName, true);
-        } catch (ArgumentException ex) {
-            throw new Exception("Invalid build target " + assetBundleTargetName, ex);
-        }
+        var buildTarget = StringToEnum<BuildTarget>(assetBundleTargetName);
 
         //=> Start asset bundling
         BuildPipeline.BuildAssetBundles(assetBundleDirectory, builds, BuildAssetBundleOptions.None, buildTarget);
+    }
+
+    public static BuildAssetBundleOptions GetBuildOptionsMaskFromStrings(List<string> options)
+    {
+        return options.Aggregate(
+            BuildAssetBundleOptions.None,
+            (current, option) => current | StringToEnum<BuildAssetBundleOptions>(option)
+        );
+    }
+
+    public static T StringToEnum<T>(string enumMemberName)
+    {
+        try {
+            return (T)Enum.Parse(typeof(T), enumMemberName, true);
+        } catch (ArgumentException ex) {
+            throw new Exception("Invalid member name " + enumMemberName + " for enum " + typeof(T).Name, ex);
+        }
     }
 
     public static Dictionary<string, List<string>> GetCommandLineArgs()

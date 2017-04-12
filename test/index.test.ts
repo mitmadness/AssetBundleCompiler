@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as assetsBundler from '../src/AssetsBundler';
+import * as assetsBundler from '../src/assets_bundler';
 import * as index from '../src/index';
 
 describe('index', () => {

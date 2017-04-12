@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
-import * as assetsBundler from '../src/AssetsBundler';
+import * as assetsBundler from '../src/assets_bundler';
 
 describe('AssetsBundler', () => {
     const tmpFilePath = path.normalize(`${os.tmpdir()}/test.empty`);

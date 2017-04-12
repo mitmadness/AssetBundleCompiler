@@ -23,13 +23,16 @@ export async function generateAssetBundle(
     cAssetNames: string[],
     cAssetBundleDirectory: string,
     cAssetBundleName: string,
+    cAssetBundleBuildOptions: Set<string>,
     cAssetBundleTarget: string,
     signalAssetProcessed: (assetPath: string) => void = noop
 ) {
     await runUnityProcess({
         projectPath: directory,
         executeMethod: 'AssetBundleCompiler.Convert',
-        cTempAssetsDirectory, cAssetNames, cAssetBundleDirectory, cAssetBundleName, cAssetBundleTarget
+        cTempAssetsDirectory, cAssetNames, cAssetBundleDirectory, cAssetBundleName,
+        cAssetBundleBuildOptions: Array.from(cAssetBundleBuildOptions),
+        cAssetBundleTarget
     }, (message) => {
         const matches = message.match(/^Updating Assets\/CopiedAssets-[0-9]+\/(.+?)(?= - GUID)/);
         if (matches !== null) {

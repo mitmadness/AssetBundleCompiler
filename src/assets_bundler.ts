@@ -7,8 +7,34 @@ enum BundlerState { Configuring, Bundling, Dead }
 
 export type Logger = (message: string) => void;
 
+export interface IBuildOptionsMap {
+    /** Allows custom build options (ie. Unity adds enum members and the lib is not in sync) */
+    [enumMemberName: string]: boolean|undefined;
+    /** Build assetBundle without any special option. */
+    none?: boolean;
+    /** Don't compress the data when creating the asset bundle. */
+    uncompressedAssetBundle?: boolean;
+    /** Do not include type information within the AssetBundle. */
+    disableWriteTypeTree?: boolean;
+    /** Builds an asset bundle using a hash for the id of the object stored in the asset bundle. */
+    deterministicAssetBundle?: boolean;
+    /** Force rebuild the assetBundles. */
+    forceRebuildAssetBundle?: boolean;
+    /** Ignore the type tree changes when doing the incremental build check. */
+    ignoreTypeTreeChanges?: boolean;
+    /** Append the hash to the assetBundle name. */
+    appendHashToAssetBundleName?: boolean;
+    /** Use chunk-based LZ4 compression when creating the AssetBundle. */
+    chunkBasedCompression?: boolean;
+    /** Do not allow the build to succeed if any errors are reporting during it. */
+    strictMode?: boolean;
+    /** Do a dry run build. */
+    dryRunBuild?: boolean;
+}
+
 export class AssetsBundler {
     private fileStreams: fs.ReadStream[] = [];
+    private buildOptions = new Set<string>();
     private buildTarget: unityproj.BuildTarget;
     private finalDest: string|fs.WriteStream;
     private state = BundlerState.Configuring;
@@ -46,6 +72,16 @@ export class AssetsBundler {
         return this;
     }
 
+    public withBuildOptions(buildOptions: IBuildOptionsMap): this {
+        this.checkBundlerIsntConfigured();
+
+        Object.keys(buildOptions)
+            .filter(key => buildOptions[key])
+            .forEach(key => this.buildOptions.add(key));
+
+        return this;
+    }
+
     public async to(
         file: streamMaker.WritableFileInput,
         { overwrite }: { overwrite: boolean } = { overwrite: true }
@@ -66,7 +102,7 @@ export class AssetsBundler {
         try {
             //=> Create project and temporary "sub project"
             //---------------------------------------------
-            this.logger('Warmuping Unity project...');
+            this.logger('Preparing Unity project...');
             await unityproj.warmupProject(buildContext);
 
             //=> Copy original assets into the project (Unity limitation)
@@ -74,19 +110,27 @@ export class AssetsBundler {
             this.logger('Copying assets...');
             await unityproj.copyAssetsToProject(buildContext, this.fileStreams);
 
-            //=> Generate the asset bundle, then move it to the right place
-            //-------------------------------------------------------------
+            //=> Generate the asset bundle
+            //----------------------------
             this.logger('Generating asset bundle...');
-            const logAssetImported = (asset: string) => this.logger(`Updating resource: ${asset}`);
 
-            await unityproj.generateAssetBundle(buildContext, this.fileStreams, this.buildTarget, logAssetImported);
+            await unityproj.generateAssetBundle(
+                buildContext,
+                this.fileStreams,
+                this.buildOptions,
+                this.buildTarget,
+                asset => this.logger(`Updating resource: ${asset}`)
+            );
+
+            //=> Move the generated asset bundle to the final dest
+            //----------------------------------------------------
             await unityproj.moveGeneratedAssetBundle(buildContext, this.finalDest, overwrite);
         } finally {
+            //=> Success or error doesn't matter, we have to cleanup!
+            //-------------------------------------------------------
             process.removeListener('SIGINT', signalCleanup);
             process.removeListener('SIGTERM', signalCleanup);
 
-            //=> Clean temporary "sub project" folders
-            //----------------------------------------
             await this.cleanup(buildContext);
         }
 
