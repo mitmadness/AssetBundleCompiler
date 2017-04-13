@@ -13,7 +13,7 @@ From the [documentation](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)
 Build automation with Unity's CLI and generating asset bundles gives headaches. If you are integrating asset bundle generation in a Node.js server or want a simple tool to do it, AssetBundleCompiler may satisfy you:
 
 ```typescript
-await bundle(...assets).for(WebGL).to('/path/to/asset.bundle');
+await bundle(...assets).targeting(WebGL).to('/path/to/asset.bundle');
 ```
 
  - [Installation & Usage](#installation--usage)
@@ -50,11 +50,11 @@ const { WebGL } = BuildTargets;
 // Those assets could be anywhere on the filesystem.
 // To pass an array of paths, use bundle(...paths) syntax.
 await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
-    // .for() is mandatory and tells the library what platform your asset bundle targets.
+    // .targeting() is mandatory and tells the library what platform your asset bundle targets.
     // You can either pass a predefined constant in BuildTargets, or a string,
     // matching the name of a member of the UnityEditor.BuildTarget enum.
     // @see https://docs.unity3d.com/ScriptReference/BuildTarget.html
-    .for(WebGL)
+    .targeting(WebGL)
     
     // Lets you install custom Editor scripts before asset bundle generation.
     // This is very useful, for example, to create an Asset Postprocessor to customize how
@@ -83,7 +83,7 @@ const bundler = new AssetsBundler();
 
 await bundler
     .includingAssets('/abs/path/to/fbx', '/abs/path/to/texture')
-    .for(WebGL)
+    .targeting(WebGL)
     .to('/abs/path/to/assetbundle.bin');
 ```
 

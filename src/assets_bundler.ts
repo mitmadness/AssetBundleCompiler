@@ -48,7 +48,7 @@ export class AssetsBundler {
         return this;
     }
 
-    public for(buildTarget: unityproj.BuildTarget): this {
+    public targeting(buildTarget: unityproj.BuildTarget): this {
         this.checkBundlerIsntConfigured();
 
         if (typeof buildTarget !== 'string') {
@@ -95,7 +95,7 @@ export class AssetsBundler {
         { overwrite }: { overwrite: boolean } = { overwrite: true }
     ): Promise<void> {
         if (!this.buildTarget) {
-            throw new Error('You must set a build target by calling for() before calling to().');
+            throw new Error('You must set a build target by calling targeting() before calling to().');
         }
 
         this.state = BundlerState.Bundling;

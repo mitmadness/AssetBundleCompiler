@@ -25,14 +25,14 @@ describe('AssetsBundler', () => {
         });
     });
 
-    describe('#for()', () => {
+    describe('#targeting()', () => {
         it('should take strings', () => {
-            expect(bundler.for('EnumMemberName')).to.equal(bundler);
+            expect(bundler.targeting('EnumMemberName')).to.equal(bundler);
         });
 
         it('should throw when passing something other than a string', () => {
-            expect(() => { bundler.for(null as any); }).to.throw();
-            expect(() => { bundler.for(5 as any); }).to.throw();
+            expect(() => { bundler.targeting(null as any); }).to.throw();
+            expect(() => { bundler.targeting(5 as any); }).to.throw();
         });
     });
 });
