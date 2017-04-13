@@ -76,8 +76,7 @@ await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
 const bundler = new AssetsBundler();
 
 await bundler
-    .including('/abs/path/to/fbx')
-    .including('/abs/path/to/texture')
+    .includingAssets('/abs/path/to/fbx', '/abs/path/to/texture')
     .for(WebGL)
     .to('/abs/path/to/assetbundle.bin');
 ```

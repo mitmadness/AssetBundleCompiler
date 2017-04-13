@@ -12,16 +12,16 @@ describe('AssetsBundler', () => {
 
     beforeEach(() => bundler = new assetsBundler.AssetsBundler());
 
-    describe('#including()', () => {
+    describe('#includingAssets()', () => {
         it('should take path strings or read streams', () => {
-            expect(bundler.including(tmpFilePath)).to.equal(bundler);
-            expect(bundler.including(fs.createReadStream(tmpFilePath))).to.equal(bundler);
+            expect(bundler.includingAssets(tmpFilePath)).to.equal(bundler);
+            expect(bundler.includingAssets(fs.createReadStream(tmpFilePath))).to.equal(bundler);
         });
 
         it('should throw when passing something other than a string or read stream', () => {
-            expect(() => { bundler.including(null as any); }).to.throw();
-            expect(() => { bundler.including(5 as any); }).to.throw();
-            expect(() => { bundler.including(fs.createWriteStream(tmpFilePath) as any); }).to.throw();
+            expect(() => { bundler.includingAssets(null as any); }).to.throw();
+            expect(() => { bundler.includingAssets(5 as any); }).to.throw();
+            expect(() => { bundler.includingAssets(fs.createWriteStream(tmpFilePath) as any); }).to.throw();
         });
     });
 

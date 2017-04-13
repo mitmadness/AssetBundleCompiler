@@ -34,17 +34,16 @@ export interface IBuildOptionsMap {
 
 export class AssetsBundler {
     private editorScriptsStreams: fs.ReadStream[] = [];
-    private fileStreams: fs.ReadStream[] = [];
+    private assetsStreams: fs.ReadStream[] = [];
     private buildOptions = new Set<string>();
     private buildTarget: unityproj.BuildTarget;
     private finalDest: string|fs.WriteStream;
     private state = BundlerState.Configuring;
 
-    public including(file: streamMaker.ReadableFileInput): this {
+    public includingAssets(...assets: streamMaker.ReadableFileInput[]): this {
         this.checkBundlerIsntConfigured();
 
-        const fileStream = streamMaker.normalizeReadStream(file);
-        this.fileStreams.push(fileStream);
+        assets.map(streamMaker.normalizeReadStream).forEach(stream => this.assetsStreams.push(stream));
 
         return this;
     }
@@ -86,9 +85,7 @@ export class AssetsBundler {
     public passEditorScripts(...scripts: streamMaker.ReadableFileInput[]): this {
         this.checkBundlerIsntConfigured();
 
-        const scriptStreams = scripts.map(streamMaker.normalizeReadStream);
-
-        this.editorScriptsStreams = this.editorScriptsStreams.concat(scriptStreams);
+        scripts.map(streamMaker.normalizeReadStream).forEach(stream => this.editorScriptsStreams.push(stream));
 
         return this;
     }
@@ -121,7 +118,7 @@ export class AssetsBundler {
             //=> Copy original assets and scripts into the project (Unity limitation)
             //-----------------------------------------------------------------------
             this.logger(`Copying assets to ${buildContext.assetsDir}`);
-            await unityproj.copyAssetsInProject(buildContext, this.fileStreams);
+            await unityproj.copyAssetsInProject(buildContext, this.assetsStreams);
 
             this.logger(`Copying custom editor scripts to ${buildContext.editorScriptsDir}`);
             await unityproj.copyEditorScriptsInProject(buildContext, this.editorScriptsStreams);
@@ -132,7 +129,7 @@ export class AssetsBundler {
 
             await unityproj.generateAssetBundle(
                 buildContext,
-                this.fileStreams,
+                this.assetsStreams,
                 this.buildOptions,
                 this.buildTarget,
                 asset => this.logger(`Updating resource: ${asset}`)

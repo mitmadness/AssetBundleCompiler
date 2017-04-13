@@ -7,12 +7,6 @@ export { setUnityPath } from './unity_finder';
 export { UnityCrashError } from './unity_invoker';
 export { BuildTargets };
 
-export function bundle(...files: ReadableFileInput[]): AssetsBundler {
-    const bundler = new AssetsBundler();
-
-    for (const file of files) {
-        bundler.including(file);
-    }
-
-    return bundler;
+export function bundle(...assets: ReadableFileInput[]): AssetsBundler {
+    return new AssetsBundler().includingAssets(...assets);
 }
