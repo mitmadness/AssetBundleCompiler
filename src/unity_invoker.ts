@@ -19,7 +19,6 @@ export async function createProject(directory: string): Promise<void> {
 
 export async function generateAssetBundle(
     directory: string,
-    cTempAssetsDirectory: string,
     cAssetNames: string[],
     cAssetBundleDirectory: string,
     cAssetBundleName: string,
@@ -30,11 +29,11 @@ export async function generateAssetBundle(
     await runUnityProcess({
         projectPath: directory,
         executeMethod: 'AssetBundleCompiler.Convert',
-        cTempAssetsDirectory, cAssetNames, cAssetBundleDirectory, cAssetBundleName,
+        cAssetNames, cAssetBundleDirectory, cAssetBundleName,
         cAssetBundleBuildOptions: Array.from(cAssetBundleBuildOptions),
         cAssetBundleTarget
     }, (message) => {
-        const matches = message.match(/^Updating Assets\/CopiedAssets-[0-9]+\/(.+?)(?= - GUID)/);
+        const matches = message.match(/^Updating Assets\/CopiedAssets\/(.+?)(?= - GUID)/);
         if (matches !== null) {
             signalAssetProcessed(matches[1]);
         }

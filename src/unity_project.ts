@@ -2,8 +2,8 @@ import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
 import * as pify from 'pify';
+import { BuildContext } from './build_context';
 import * as buildTargets from './build_targets';
-import { BuildContext } from './BuildContext';
 import * as streamMaker from './stream_maker';
 import * as unity from './unity_invoker';
 
@@ -65,7 +65,6 @@ export async function generateAssetBundle(
 
     await unity.generateAssetBundle(
         ProjectDirectory,
-        context.assetsDirName,
         assetNames,
         context.assetBundleDir,
         'assetbundle',

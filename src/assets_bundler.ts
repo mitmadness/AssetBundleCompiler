@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { BuildContext } from './BuildContext';
+import { BuildContext } from './build_context';
 import * as streamMaker from './stream_maker';
 import * as unityproj from './unity_project';
 

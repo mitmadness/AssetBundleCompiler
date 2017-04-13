@@ -11,7 +11,6 @@ public static class AssetBundleCompiler
         //=> Retrieve CLI arguments
         var args = GetCommandLineArgs();
 
-        var tempAssetsDirectory = args["cTempAssetsDirectory"][0];
         var assetNames = args["cAssetNames"];
         var assetBundleDirectory = args["cAssetBundleDirectory"][0];
         var assetBundleName = args["cAssetBundleName"][0];
@@ -23,7 +22,7 @@ public static class AssetBundleCompiler
 
         var build = new AssetBundleBuild {
             assetBundleName = assetBundleName,
-            assetNames = assetNames.Select(assetName => "Assets" + ds + tempAssetsDirectory + ds + assetName).ToArray()
+            assetNames = assetNames.Select(assetName => "Assets" + ds + "CopiedAssets" + ds + assetName).ToArray()
         };
 
         var builds = new[] { build };
