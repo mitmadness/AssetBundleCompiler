@@ -103,6 +103,8 @@ export class AssetsBundler {
             //=> Create project and temporary "sub project"
             //---------------------------------------------
             this.logger(`Preparing Unity project in ${buildContext.projectRootDir}`);
+
+            await unityproj.cleanupProject(buildContext);
             await unityproj.warmupProject(buildContext);
 
             //=> Copy original assets into the project (Unity limitation)
