@@ -13,6 +13,24 @@ export const ProjectDirectory = path.join(os.tmpdir(), 'AssetBundleCompiler');
 const CompilerScriptSource = path.resolve(`${__dirname}/../../resources/AssetBundleCompiler.cs`);
 const CompilerScriptDest = path.resolve(`${ProjectDirectory}/Assets/Editor/AssetBundleCompiler.cs`);
 
+function copyStreamInDirectory(fileStream: fs.ReadStream, directory: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const fileName = path.basename(fileStream.path as string);
+        const fileDestStream = fs.createWriteStream(path.join(directory, fileName));
+
+        fileStream.pipe(fileDestStream);
+
+        fileDestStream.on('finish', resolve);
+        fileDestStream.on('error', reject);
+    });
+}
+
+async function copyStreamsInDirectory(fileStreams: fs.ReadStream[], directory: string): Promise<void> {
+    const copyTasks = fileStreams.map(stream => copyStreamInDirectory(stream, directory));
+
+    await Promise.all(copyTasks);
+}
+
 export async function shouldCreateProject(): Promise<boolean> {
     try {
         await pify(fs.access)(ProjectDirectory, fs.constants.R_OK | fs.constants.W_OK);
@@ -34,24 +52,23 @@ export async function warmupProject(context: BuildContext): Promise<void> {
     }
 
     const mkdir = pify(fs.mkdir);
+    await mkdir(context.editorScriptsDir);
     await mkdir(context.assetsDir);
     await mkdir(context.assetBundleDir);
 }
 
-export async function copyAssetsToProject(context: BuildContext, fileStreams: fs.ReadStream[]): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        let streamsLeft = fileStreams.length;
+export async function copyEditorScriptsInProject(
+    context: BuildContext,
+    scriptsStreams: fs.ReadStream[]
+): Promise<void> {
+    await copyStreamsInDirectory(scriptsStreams, context.editorScriptsDir);
+}
 
-        for (const assetSource of fileStreams) {
-            const fileName = path.basename(assetSource.path as string);
-            const assetDest = fs.createWriteStream(path.join(context.assetsDir, fileName));
-
-            assetSource.pipe(assetDest);
-
-            assetDest.on('finish', () => --streamsLeft || resolve());
-            assetDest.on('error', (err: Error) => reject(err));
-        }
-    });
+export async function copyAssetsInProject(
+    context: BuildContext,
+    assetStreams: fs.ReadStream[]
+): Promise<void> {
+    await copyStreamsInDirectory(assetStreams, context.assetsDir);
 }
 
 export async function generateAssetBundle(
@@ -102,9 +119,11 @@ export async function moveGeneratedAssetBundle(
 }
 
 export async function cleanupProject(context: BuildContext): Promise<void> {
-    const rmrf = pify(fs.remove);
+    const remove = pify(fs.remove);
 
-    await rmrf(context.assetsDir);
-    await rmrf(context.assetsDir + '.meta');
-    await rmrf(context.assetBundleDir);
+    await remove(context.editorScriptsDir);
+    await remove(context.editorScriptsDir + '.meta');
+    await remove(context.assetsDir);
+    await remove(context.assetsDir + '.meta');
+    await remove(context.assetBundleDir);
 }

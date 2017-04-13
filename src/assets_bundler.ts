@@ -33,6 +33,7 @@ export interface IBuildOptionsMap {
 }
 
 export class AssetsBundler {
+    private editorScriptsStreams: fs.ReadStream[] = [];
     private fileStreams: fs.ReadStream[] = [];
     private buildOptions = new Set<string>();
     private buildTarget: unityproj.BuildTarget;
@@ -82,6 +83,16 @@ export class AssetsBundler {
         return this;
     }
 
+    public passEditorScripts(...scripts: streamMaker.ReadableFileInput[]): this {
+        this.checkBundlerIsntConfigured();
+
+        const scriptStreams = scripts.map(streamMaker.normalizeReadStream);
+
+        this.editorScriptsStreams = this.editorScriptsStreams.concat(scriptStreams);
+
+        return this;
+    }
+
     public async to(
         file: streamMaker.WritableFileInput,
         { overwrite }: { overwrite: boolean } = { overwrite: true }
@@ -107,10 +118,13 @@ export class AssetsBundler {
             await unityproj.cleanupProject(buildContext);
             await unityproj.warmupProject(buildContext);
 
-            //=> Copy original assets into the project (Unity limitation)
-            //-----------------------------------------------------------
+            //=> Copy original assets and scripts into the project (Unity limitation)
+            //-----------------------------------------------------------------------
             this.logger(`Copying assets to ${buildContext.assetsDir}`);
-            await unityproj.copyAssetsToProject(buildContext, this.fileStreams);
+            await unityproj.copyAssetsInProject(buildContext, this.fileStreams);
+
+            this.logger(`Copying custom editor scripts to ${buildContext.editorScriptsDir}`);
+            await unityproj.copyEditorScriptsInProject(buildContext, this.editorScriptsStreams);
 
             //=> Generate the asset bundle
             //----------------------------
