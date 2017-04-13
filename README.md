@@ -56,6 +56,12 @@ await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
     // @see https://docs.unity3d.com/ScriptReference/BuildTarget.html
     .for(WebGL)
     
+    // Lets you install custom Editor scripts before asset bundle generation.
+    // This is very useful, for example, to create an Asset Postprocessor to customize how
+    // your resources are imported into the asset bundle, using AssetImporters for example.
+    // @see https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html
+    .includingEditorScripts('/abs/path/to/script.dll', '/abs/path/to/script.cs')
+    
     // Lets you define build options. Those are always flags, and the key names represent
     // member names of the UnityEditor.BuildAssetBundleOptions enum.
     // @see https://docs.unity3d.com/ScriptReference/BuildAssetBundleOptions.html
