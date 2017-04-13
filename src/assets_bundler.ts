@@ -82,7 +82,7 @@ export class AssetsBundler {
         return this;
     }
 
-    public passEditorScripts(...scripts: streamMaker.ReadableFileInput[]): this {
+    public includingEditorScripts(...scripts: streamMaker.ReadableFileInput[]): this {
         this.checkBundlerIsntConfigured();
 
         scripts.map(streamMaker.normalizeReadStream).forEach(stream => this.editorScriptsStreams.push(stream));
