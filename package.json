@@ -10,8 +10,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "semantic-release": "semantic-release pre && npm publish --access=public && semantic-release post",
-    "test": "mocha dist/test/**/*.js"
+    "semantic-release": "yarn lint && semantic-release pre && npm publish --access=public && semantic-release post",
+    "test": "mocha dist/test/**/*.js",
+    "lint": "tslint src/**/*.ts test/**/*.ts"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
