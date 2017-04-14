@@ -1,0 +1,22 @@
+language: node_js
+
+cache:
+  directories:
+    - node_modules
+
+notifications:
+  email: false
+
+node_js:
+  - '7'
+  - '6'
+
+script:
+  - yarn build
+
+after_success:
+  - yarn semantic-release
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
