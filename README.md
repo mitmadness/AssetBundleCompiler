@@ -70,6 +70,10 @@ await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
     // This lets you define a simple logger to get simple text updates about the conversion.
     .withLogger(message => console.log(message))
     
+    // This lets you define a logger for the real-time output of Unity (stdout+stderr).
+    // Beware, it's very verbose :)
+    .withUnityLogger(message => console.log(`Unity: ${message}`))
+    
     // This is the "run" function and marks the termination of the fluent calls
     // by returning a Promise that resolves when the asset bundle generation ends.
     // Give it a path to the asset bundle name or a fs.WriteStream.
