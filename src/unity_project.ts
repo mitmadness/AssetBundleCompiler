@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as pify from 'pify';
 import { BuildContext } from './build_context';
 import * as buildTargets from './build_targets';
+import { SimpleLogger } from './logger';
 import * as streamMaker from './stream_maker';
 import * as unity from './unity_invoker';
 
@@ -76,7 +77,8 @@ export async function generateAssetBundle(
     fileStreams: fs.ReadStream[],
     buildOptions: Set<string>,
     buildTarget: BuildTarget,
-    signalAssetProcessed?: (assetPath: string) => void
+    unityLogger?: SimpleLogger,
+    signalAssetProcessed?: SimpleLogger
 ): Promise<void> {
     const assetNames = fileStreams.map(fileStream => path.basename(fileStream.path as string));
 
@@ -87,6 +89,7 @@ export async function generateAssetBundle(
         'assetbundle',
         buildOptions,
         buildTarget,
+        unityLogger,
         signalAssetProcessed
     );
 }

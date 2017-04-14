@@ -1,11 +1,10 @@
 import * as fs from 'fs-extra';
 import { BuildContext } from './build_context';
+import { noopLogger, SimpleLogger } from './logger';
 import * as streamMaker from './stream_maker';
 import * as unityproj from './unity_project';
 
 enum BundlerState { Configuring, Bundling, Dead }
-
-export type Logger = (message: string) => void;
 
 export interface IBuildOptionsMap {
     /** Allows custom build options (ie. Unity adds enum members and the lib is not in sync) */
@@ -33,6 +32,8 @@ export interface IBuildOptionsMap {
 }
 
 export class AssetsBundler {
+    private logger: SimpleLogger = noopLogger;
+    private unityLogger: SimpleLogger = noopLogger;
     private editorScriptsStreams: fs.ReadStream[] = [];
     private assetsStreams: fs.ReadStream[] = [];
     private buildOptions = new Set<string>();
@@ -60,14 +61,20 @@ export class AssetsBundler {
         return this;
     }
 
-    public withLogger(loggerFunction: Logger): this {
+    public withLogger(logger: SimpleLogger): this {
         this.checkBundlerIsntConfigured();
+        this.checkLoggerType(logger);
 
-        if (typeof loggerFunction !== 'function') {
-            throw new Error('loggerFunction must be a function.');
-        }
+        this.logger = logger;
 
-        this.logger = loggerFunction;
+        return this;
+    }
+
+    public withUnityLogger(unityLogger: SimpleLogger): this {
+        this.checkBundlerIsntConfigured();
+        this.checkLoggerType(unityLogger);
+
+        this.unityLogger = unityLogger;
 
         return this;
     }
@@ -132,7 +139,8 @@ export class AssetsBundler {
                 this.assetsStreams,
                 this.buildOptions,
                 this.buildTarget,
-                asset => this.logger(`Updating resource: ${asset}`)
+                this.unityLogger,
+                assetPath => this.logger(`Updating resource: ${assetPath}`)
             );
 
             //=> Move the generated asset bundle to the final dest
@@ -165,9 +173,10 @@ export class AssetsBundler {
         process.exit(0);
     }
 
-    private logger(message: string): void {
-        // Do nothing by default.
-        // The API consumer replaces this method.
+    private checkLoggerType(logger: SimpleLogger): void {
+        if (typeof logger !== 'function') {
+            throw new Error('Logger must be a function of type (message?: string) => void.');
+        }
     }
 
     private checkBundlerIsntConfigured(): void {

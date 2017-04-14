@@ -3,15 +3,12 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import * as pify from 'pify';
+import { noopLogger, SimpleLogger } from './logger';
 import { getUnityPath } from './unity_finder';
-
-type StdoutLogger = (message: string) => void;
 
 interface IArgvObject {
     [argName: string]: string|string[]|null;
 }
-
-const noop = () => {}; // tslint:disable-line:no-empty
 
 export async function createProject(directory: string): Promise<void> {
     await runUnityProcess({ createProject: directory });
@@ -24,7 +21,8 @@ export async function generateAssetBundle(
     cAssetBundleName: string,
     cAssetBundleBuildOptions: Set<string>,
     cAssetBundleTarget: string,
-    signalAssetProcessed: (assetPath: string) => void = noop
+    unityLogger: SimpleLogger = noopLogger,
+    signalAssetProcessed: SimpleLogger = noopLogger
 ) {
     await runUnityProcess({
         projectPath: directory,
@@ -33,6 +31,8 @@ export async function generateAssetBundle(
         cAssetBundleBuildOptions: Array.from(cAssetBundleBuildOptions),
         cAssetBundleTarget
     }, (message) => {
+        unityLogger(message);
+
         const matches = message.match(/^Updating Assets\/CopiedAssets\/(.+?)(?= - GUID)/);
         if (matches !== null) {
             signalAssetProcessed(matches[1]);
@@ -42,7 +42,7 @@ export async function generateAssetBundle(
 
 async function runUnityProcess(
     options: IArgvObject,
-    logger: StdoutLogger = noop
+    logger: SimpleLogger = noopLogger
 ): Promise<void> {
     //=> Merge arguments with default arguments
     options = {
