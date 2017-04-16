@@ -10,7 +10,7 @@
   "scripts": {
     "build": "yarn lint && tsc",
     "watch": "tsc -w",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post",
     "test": "mocha dist/test/**/*.js",
     "lint": "tslint src/**/*.ts test/**/*.ts"
   },
