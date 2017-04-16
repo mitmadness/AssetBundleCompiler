@@ -11,7 +11,7 @@ node_js:
   - '7'
   - '6'
 
-script:
+before_script:
   - yarn build
 
 after_success:

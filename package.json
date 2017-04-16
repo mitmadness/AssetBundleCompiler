@@ -8,7 +8,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "yarn lint && tsc",
     "watch": "tsc -w",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "mocha dist/test/**/*.js",
