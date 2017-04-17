@@ -16,8 +16,8 @@ Build automation with Unity's CLI and generating asset bundles gives headaches. 
 await bundle(...assets).targeting(WebGL).to('/path/to/asset.bundle');
 ```
 
- - [Installation & Usage](#installation--usage)
- - [Simple, fluent API](#simple-fluent-api)
+ - [Installation & Usage](#package-installation--usage)
+ - [Simple, fluent API](#link-simple-fluent-api)
  - Notes:
    [Error handling](#error-handling), [Changing Unity's executable path](#changing-unitys-executable-path), [Unity activation](#unity-activation), [Future scope](https://github.com/mitmadness/AssetBundleCompiler/projects/1)
 
