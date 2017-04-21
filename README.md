@@ -1,6 +1,6 @@
 <img src="https://github.com/mitmadness/AssetBundleCompiler/raw/master/abcompiler-logo.png" alt="AssetBundleCompiler logo" align="right">
 
-# [AssetBundle](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)Compiler
+# [AssetBundle](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)Compiler [![npm version](https://img.shields.io/npm/v/@mitm/assetbundlecompiler.svg?style=flat-square)](https://www.npmjs.com/package/@mitm/assetbundlecompiler) ![license](https://img.shields.io/github/license/mitmadness/AssetBundleCompiler.svg?style=flat-square) [![Travis Build](https://img.shields.io/travis/mitmadness/AssetBundleCompiler.svg?style=flat-square)](https://travis-ci.org/mitmadness/AssetBundleCompiler)
 
 Node.js wrapper around Unity3D's BuildPipeline to create AssetBundles programmatically from any files, in order to simplify and automatize your workflow.
 
