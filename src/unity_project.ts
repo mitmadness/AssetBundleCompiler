@@ -1,10 +1,10 @@
+import { logger } from '@mitm/unityinvoker';
 import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
 import * as pify from 'pify';
 import { BuildContext } from './build_context';
 import * as buildTargets from './build_targets';
-import { SimpleLogger } from './logger';
 import * as streamMaker from './stream_maker';
 import * as unity from './unity_invoker';
 
@@ -77,8 +77,8 @@ export async function generateAssetBundle(
     fileStreams: fs.ReadStream[],
     buildOptions: Set<string>,
     buildTarget: BuildTarget,
-    unityLogger?: SimpleLogger,
-    signalAssetProcessed?: SimpleLogger
+    unityLogger?: logger.SimpleLogger,
+    signalAssetProcessed?: logger.SimpleLogger
 ): Promise<void> {
     const assetNames = fileStreams.map(fileStream => path.basename(fileStream.path as string));
 

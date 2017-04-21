@@ -1,6 +1,6 @@
+import { logger } from '@mitm/unityinvoker';
 import * as fs from 'fs-extra';
 import { BuildContext } from './build_context';
-import { noopLogger, SimpleLogger } from './logger';
 import * as streamMaker from './stream_maker';
 import * as unityproj from './unity_project';
 
@@ -32,8 +32,8 @@ export interface IBuildOptionsMap {
 }
 
 export class AssetsBundler {
-    private logger: SimpleLogger = noopLogger;
-    private unityLogger: SimpleLogger = noopLogger;
+    private logger: logger.SimpleLogger = logger.noopLogger;
+    private unityLogger: logger.SimpleLogger = logger.noopLogger;
     private editorScriptsStreams: fs.ReadStream[] = [];
     private assetsStreams: fs.ReadStream[] = [];
     private buildOptions = new Set<string>();
@@ -61,7 +61,7 @@ export class AssetsBundler {
         return this;
     }
 
-    public withLogger(logger: SimpleLogger): this {
+    public withLogger(logger: logger.SimpleLogger): this {
         this.checkBundlerIsntConfigured();
         this.checkLoggerType(logger);
 
@@ -70,7 +70,7 @@ export class AssetsBundler {
         return this;
     }
 
-    public withUnityLogger(unityLogger: SimpleLogger): this {
+    public withUnityLogger(unityLogger: logger.SimpleLogger): this {
         this.checkBundlerIsntConfigured();
         this.checkLoggerType(unityLogger);
 
@@ -173,7 +173,7 @@ export class AssetsBundler {
         process.exit(0);
     }
 
-    private checkLoggerType(logger: SimpleLogger): void {
+    private checkLoggerType(logger: logger.SimpleLogger): void {
         if (typeof logger !== 'function') {
             throw new Error('Logger must be a function of type (message?: string) => void.');
         }
