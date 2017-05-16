@@ -2,7 +2,6 @@ import { logger } from '@mitm/unityinvoker';
 import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
-import * as pify from 'pify';
 import { BuildContext } from './build_context';
 import * as buildTargets from './build_targets';
 import * as streamMaker from './stream_maker';
@@ -34,7 +33,7 @@ async function copyStreamsInDirectory(fileStreams: fs.ReadStream[], directory: s
 
 export async function shouldCreateProject(): Promise<boolean> {
     try {
-        await pify(fs.access)(ProjectDirectory, fs.constants.R_OK | fs.constants.W_OK);
+        await fs.access(ProjectDirectory, fs.constants.R_OK | fs.constants.W_OK);
         return false;
     } catch (err) {
         return true;
@@ -42,8 +41,8 @@ export async function shouldCreateProject(): Promise<boolean> {
 }
 
 export async function copyEditorScript(): Promise<void> {
-    await pify(fs.mkdirp)(path.dirname(CompilerScriptDest));
-    await pify(fs.copy)(CompilerScriptSource, CompilerScriptDest);
+    await fs.mkdirp(path.dirname(CompilerScriptDest));
+    await fs.copy(CompilerScriptSource, CompilerScriptDest);
 }
 
 export async function warmupProject(context: BuildContext): Promise<void> {
@@ -52,10 +51,9 @@ export async function warmupProject(context: BuildContext): Promise<void> {
         await copyEditorScript();
     }
 
-    const mkdir = pify(fs.mkdir);
-    await mkdir(context.editorScriptsDir);
-    await mkdir(context.assetsDir);
-    await mkdir(context.assetBundleDir);
+    await fs.mkdir(context.editorScriptsDir);
+    await fs.mkdir(context.assetsDir);
+    await fs.mkdir(context.assetBundleDir);
 }
 
 export async function copyEditorScriptsInProject(
@@ -102,11 +100,11 @@ export async function moveGeneratedAssetBundle(
     const assetBundlePath = path.resolve(`${context.assetBundleDir}/assetbundle`);
 
     if (typeof finalDest === 'string') {
-        await pify(fs.move)(assetBundlePath, finalDest, { overwrite });
+        await fs.move(assetBundlePath, finalDest, { overwrite });
     } else if (streamMaker.isWriteStream(finalDest)) {
         if (!overwrite) {
             try {
-                await pify(fs.access)(finalDest.path);
+                await fs.access(finalDest.path);
                 throw new Error(`File ${finalDest.path} already exists, overwrite option is false, aborting.`);
             } finally { /* pass */ }
         }
@@ -122,11 +120,9 @@ export async function moveGeneratedAssetBundle(
 }
 
 export async function cleanupProject(context: BuildContext): Promise<void> {
-    const remove = pify(fs.remove);
-
-    await remove(context.editorScriptsDir);
-    await remove(context.editorScriptsDir + '.meta');
-    await remove(context.assetsDir);
-    await remove(context.assetsDir + '.meta');
-    await remove(context.assetBundleDir);
+    await fs.remove(context.editorScriptsDir);
+    await fs.remove(context.editorScriptsDir + '.meta');
+    await fs.remove(context.assetsDir);
+    await fs.remove(context.assetsDir + '.meta');
+    await fs.remove(context.assetBundleDir);
 }
