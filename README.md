@@ -10,6 +10,8 @@ From the [documentation](https://docs.unity3d.com/Manual/AssetBundlesIntro.html)
 
 > AssetBundles are files which you can export from Unity to contain Assets of your choice, [that] can be loaded on demand by your application. This allows you to stream content, such as models, Textures, audio clips, or even entire Scenes [...].
 
+*:point_right: See also: [@mitm/chuck](https://github.com/mitmadness/chuck), a fully-featured webservice that builds asset bundles.*
+
 ----------------
 
 Build automation with Unity's CLI and generating asset bundles gives headaches. If you are integrating asset bundle generation in a Node.js server or want a simple tool to do it, AssetBundleCompiler may satisfy you:
