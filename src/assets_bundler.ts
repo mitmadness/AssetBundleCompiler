@@ -1,5 +1,6 @@
 import { logger } from '@mitm/unityinvoker';
 import * as fs from 'fs-extra';
+import * as path from 'path';
 import { BuildContext } from './build_context';
 import * as streamMaker from './stream_maker';
 import * as unityproj from './unity_project';
@@ -38,7 +39,6 @@ export class AssetsBundler {
     private assetsStreams: fs.ReadStream[] = [];
     private buildOptions = new Set<string>();
     private buildTarget: unityproj.BuildTarget;
-    private finalDest: string|fs.WriteStream;
     private state = BundlerState.Configuring;
 
     public includingAssets(...assets: streamMaker.ReadableFileInput[]): this {
@@ -106,10 +106,15 @@ export class AssetsBundler {
         }
 
         this.state = BundlerState.Bundling;
-        this.finalDest = file;
 
-        const buildContext = new BuildContext();
+        //=> Normalize dest to a writable strem
+        const fileStream = streamMaker.normalizeWriteStream(file);
+        const fileName = path.basename(fileStream.path.toString());
 
+        //=> Create the build context (contains infos about the paths used by the current build)
+        const buildContext = new BuildContext(fileName);
+
+        //=> Handle abrupt process terminations
         const signalCleanup = this.signalCleanup.bind(this, buildContext);
         process.on('SIGINT', signalCleanup);
         process.on('SIGTERM', signalCleanup);
@@ -146,7 +151,7 @@ export class AssetsBundler {
             //=> Move the generated asset bundle to the final dest
             //----------------------------------------------------
             this.logger(`Moving asset bundle to target destination`);
-            await unityproj.moveGeneratedAssetBundle(buildContext, this.finalDest, overwrite);
+            await unityproj.moveGeneratedAssetBundle(buildContext, fileStream, overwrite);
         } finally {
             //=> Success or error doesn't matter, we have to cleanup!
             //-------------------------------------------------------

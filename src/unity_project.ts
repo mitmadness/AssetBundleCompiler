@@ -5,7 +5,6 @@ import * as os from 'os';
 import * as path from 'path';
 import { BuildContext } from './build_context';
 import * as buildTargets from './build_targets';
-import * as streamMaker from './stream_maker';
 import * as unity from './unity_invoker';
 
 export type BuildTarget = (keyof typeof buildTargets)|string;
@@ -85,7 +84,7 @@ export async function generateAssetBundle(
         ProjectDirectory,
         assetNames,
         context.assetBundleDir,
-        'assetbundle',
+        context.assetBundleName,
         buildOptions,
         buildTarget,
         unityLogger,
@@ -95,29 +94,23 @@ export async function generateAssetBundle(
 
 export async function moveGeneratedAssetBundle(
     context: BuildContext,
-    finalDest: string|fs.WriteStream,
+    finalDest: fs.WriteStream,
     overwrite: boolean
 ): Promise<void> {
-    const assetBundlePath = path.resolve(`${context.assetBundleDir}/assetbundle`);
-
-    if (typeof finalDest === 'string') {
-        await fsx.move(assetBundlePath, finalDest, { overwrite });
-    } else if (streamMaker.isWriteStream(finalDest)) {
-        if (!overwrite) {
-            try {
-                await fsx.access(finalDest.path);
-                throw new Error(`File ${finalDest.path} already exists, overwrite option is false, aborting.`);
-            } finally { /* pass */ }
-        }
-
-        const assetBundleStream = fsx.createReadStream(assetBundlePath);
-
-        return new Promise<void>((resolve, reject) => {
-            assetBundleStream.pipe(finalDest as fs.WriteStream)
-                .on('finish', () => resolve())
-                .on('error', (err: Error) => reject(err));
-        });
+    if (!overwrite) {
+        try {
+            await fsx.access(finalDest.path);
+            throw new Error(`File ${finalDest.path} already exists, overwrite option is false, aborting.`);
+        } finally { /* pass */ }
     }
+
+    const assetBundleStream = fsx.createReadStream(context.assetBundlePath);
+
+    return new Promise<void>((resolve, reject) => {
+        assetBundleStream.pipe(finalDest)
+            .on('finish', () => resolve())
+            .on('error', (err: Error) => reject(err));
+    });
 }
 
 export async function cleanupProject(context: BuildContext): Promise<void> {
