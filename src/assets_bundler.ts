@@ -42,7 +42,7 @@ export class AssetsBundler {
     private state = BundlerState.Configuring;
 
     public includingAssets(...assets: streamMaker.ReadableFileInput[]): this {
-        this.checkBundlerIsntConfigured();
+        this.checkBundlerIsntAlreadyConfigured();
 
         assets.map(streamMaker.normalizeReadStream).forEach(stream => this.assetsStreams.push(stream));
 
@@ -50,7 +50,7 @@ export class AssetsBundler {
     }
 
     public targeting(buildTarget: unityproj.BuildTarget): this {
-        this.checkBundlerIsntConfigured();
+        this.checkBundlerIsntAlreadyConfigured();
 
         if (typeof buildTarget !== 'string') {
             throw new Error('buildTarget must be a string (member name of an UnityEngine.BuildTarget enum).');
@@ -62,7 +62,7 @@ export class AssetsBundler {
     }
 
     public withLogger(loggerFn: logger.SimpleLogger): this {
-        this.checkBundlerIsntConfigured();
+        this.checkBundlerIsntAlreadyConfigured();
         this.checkLoggerType(loggerFn);
 
         this.logger = loggerFn;
@@ -71,7 +71,7 @@ export class AssetsBundler {
     }
 
     public withUnityLogger(unityLogger: logger.SimpleLogger): this {
-        this.checkBundlerIsntConfigured();
+        this.checkBundlerIsntAlreadyConfigured();
         this.checkLoggerType(unityLogger);
 
         this.unityLogger = unityLogger;
@@ -80,7 +80,7 @@ export class AssetsBundler {
     }
 
     public withBuildOptions(buildOptions: IBuildOptionsMap): this {
-        this.checkBundlerIsntConfigured();
+        this.checkBundlerIsntAlreadyConfigured();
 
         Object.keys(buildOptions)
             .filter(key => buildOptions[key])
@@ -90,7 +90,7 @@ export class AssetsBundler {
     }
 
     public includingEditorScripts(...scripts: streamMaker.ReadableFileInput[]): this {
-        this.checkBundlerIsntConfigured();
+        this.checkBundlerIsntAlreadyConfigured();
 
         scripts.map(streamMaker.normalizeReadStream).forEach(stream => this.editorScriptsStreams.push(stream));
 
@@ -184,9 +184,9 @@ export class AssetsBundler {
         }
     }
 
-    private checkBundlerIsntConfigured(): void {
+    private checkBundlerIsntAlreadyConfigured(): void {
         if (this.state !== BundlerState.Configuring) {
-            throw new Error('Cannot configure the bundler after conversion!');
+            throw new Error('Cannot configure the bundler after the AssetBundle build has started!');
         }
     }
 }
