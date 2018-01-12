@@ -20,7 +20,7 @@ export async function generateAssetBundle(
         cAssetBundleTarget
     };
 
-    let compilerError: Error|null = null;
+    let compilerError: Error | null = null;
 
     function handleLogLine(message: string): void {
         unityLogger(message);
@@ -48,14 +48,14 @@ export async function generateAssetBundle(
     }
 }
 
-function getUpdatingAsset(message: string): string|null {
+function getUpdatingAsset(message: string): string | null {
     const updateMessage = /^Updating Assets\/CopiedAssets\/(.+?)(?= - GUID)/;
     const matches = message.match(updateMessage);
 
     return matches !== null ? matches[1] : null;
 }
 
-function getUnrecognizedAsset(message: string): string|null {
+function getUnrecognizedAsset(message: string): string | null {
     const unrecogMessage = /^Unrecognized assets cannot be included in AssetBundles?: "Assets\/CopiedAssets\/(.+?)"/;
     const matches = message.match(unrecogMessage);
 

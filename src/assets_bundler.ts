@@ -9,7 +9,7 @@ enum BundlerState { Configuring, Bundling, Dead }
 
 export interface IBuildOptionsMap {
     /** Allows custom build options (ie. Unity adds enum members and the lib is not in sync) */
-    [enumMemberName: string]: boolean|undefined;
+    [enumMemberName: string]: boolean | undefined;
     /** Build assetBundle without any special option. */
     none?: boolean;
     /** Don't compress the data when creating the asset bundle. */
@@ -61,11 +61,11 @@ export class AssetsBundler {
         return this;
     }
 
-    public withLogger(logger: logger.SimpleLogger): this {
+    public withLogger(loggerFn: logger.SimpleLogger): this {
         this.checkBundlerIsntConfigured();
-        this.checkLoggerType(logger);
+        this.checkLoggerType(loggerFn);
 
-        this.logger = logger;
+        this.logger = loggerFn;
 
         return this;
     }
@@ -178,8 +178,8 @@ export class AssetsBundler {
         process.exit(0);
     }
 
-    private checkLoggerType(logger: logger.SimpleLogger): void {
-        if (typeof logger !== 'function') {
+    private checkLoggerType(loggerFn: logger.SimpleLogger): void {
+        if (typeof loggerFn !== 'function') {
             throw new Error('Logger must be a function of type (message?: string) => void.');
         }
     }

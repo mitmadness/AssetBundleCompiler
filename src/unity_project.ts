@@ -7,7 +7,7 @@ import { BuildContext } from './build_context';
 import * as buildTargets from './build_targets';
 import * as unity from './unity_invoker';
 
-export type BuildTarget = (keyof typeof buildTargets)|string;
+export type BuildTarget = (keyof typeof buildTargets) | string;
 
 export const ProjectDirectory = path.join(os.tmpdir(), 'AssetBundleCompiler');
 const CompilerScriptSource = path.resolve(`${__dirname}/../../resources/AssetBundleCompiler.cs`);

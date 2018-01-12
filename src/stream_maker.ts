@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
-export type ReadableFileInput = string|fs.ReadStream;
-export type WritableFileInput = string|fs.WriteStream;
+export type ReadableFileInput = string | fs.ReadStream;
+export type WritableFileInput = string | fs.WriteStream;
 
 export function normalizeReadStream(file: ReadableFileInput) {
     if (typeof file === 'string') {
