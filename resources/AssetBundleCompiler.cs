@@ -34,7 +34,7 @@ public static class AssetBundleCompiler
         var buildTarget = StringToEnum<BuildTarget>(assetBundleTargetName);
 
         //=> Start asset bundling
-        BuildPipeline.BuildAssetBundles(assetBundleDirectory, builds, BuildAssetBundleOptions.None, buildTarget);
+        BuildPipeline.BuildAssetBundles(assetBundleDirectory, builds, buildOptions, buildTarget);
     }
 
     public static BuildAssetBundleOptions GetBuildOptionsMaskFromStrings(List<string> options)
