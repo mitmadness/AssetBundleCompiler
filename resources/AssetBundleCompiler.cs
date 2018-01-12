@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 
+// ReSharper disable once UnusedMember.Global, CheckNamespace
 public static class AssetBundleCompiler
 {
     public static void Convert()
@@ -37,7 +38,7 @@ public static class AssetBundleCompiler
         BuildPipeline.BuildAssetBundles(assetBundleDirectory, builds, buildOptions, buildTarget);
     }
 
-    public static BuildAssetBundleOptions GetBuildOptionsMaskFromStrings(List<string> options)
+    private static BuildAssetBundleOptions GetBuildOptionsMaskFromStrings(IEnumerable<string> options)
     {
         return options.Aggregate(
             BuildAssetBundleOptions.None,
@@ -45,7 +46,7 @@ public static class AssetBundleCompiler
         );
     }
 
-    public static T StringToEnum<T>(string enumMemberName)
+    private static T StringToEnum<T>(string enumMemberName)
     {
         try {
             return (T)Enum.Parse(typeof(T), enumMemberName, true);
@@ -54,7 +55,7 @@ public static class AssetBundleCompiler
         }
     }
 
-    public static Dictionary<string, List<string>> GetCommandLineArgs()
+    private static Dictionary<string, List<string>> GetCommandLineArgs()
     {
         var args = Environment.GetCommandLineArgs();
         var argsDict = new Dictionary<string, List<string>>();
