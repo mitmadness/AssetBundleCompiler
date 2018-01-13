@@ -30,6 +30,10 @@ export interface IBuildOptionsMap {
     strictMode?: boolean;
     /** Do a dry run build. */
     dryRunBuild?: boolean;
+    /** Disables Asset Bundle LoadAsset by file name. */
+    disableLoadAssetByFileName?: boolean;
+    /** Disables Asset Bundle LoadAsset by file name with extension. */
+    disableLoadAssetByFileNameWithExtension?: boolean;
 }
 
 export class AssetsBundler {
