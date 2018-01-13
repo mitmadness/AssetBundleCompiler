@@ -36,6 +36,11 @@ export interface IBuildOptionsMap {
     disableLoadAssetByFileNameWithExtension?: boolean;
 }
 
+export interface IExportOptions {
+    overwrite?: boolean;
+    manifestFile?: streamMaker.WritableFileInput;
+}
+
 export class AssetsBundler {
     private logger: logger.SimpleLogger = logger.noopLogger;
     private unityLogger: logger.SimpleLogger = logger.noopLogger;
@@ -103,17 +108,22 @@ export class AssetsBundler {
 
     public async to(
         file: streamMaker.WritableFileInput,
-        { overwrite }: { overwrite: boolean } = { overwrite: true }
-    ): Promise<void> {
+        options: IExportOptions = {}): Promise<unityproj.IAssetBundleManifest> {
+
         if (!this.buildTarget) {
             throw new Error('You must set a build target by calling targeting() before calling to().');
         }
 
+        const defaultedOptions = { overwrite: true, ...options };
+
         this.state = BundlerState.Bundling;
 
-        //=> Normalize dest to a writable strem
+        //=> Normalize destinations to writable streams
         const fileStream = streamMaker.normalizeWriteStream(file);
         const fileName = path.basename(fileStream.path.toString());
+
+        const hasManifest = !!defaultedOptions.manifestFile;
+        const manifestStream = hasManifest ? streamMaker.normalizeWriteStream(defaultedOptions.manifestFile!) : null;
 
         //=> Create the build context (contains infos about the paths used by the current build)
         const buildContext = new BuildContext(fileName);
@@ -122,6 +132,8 @@ export class AssetsBundler {
         const signalCleanup = this.signalCleanup.bind(this, buildContext);
         process.on('SIGINT', signalCleanup);
         process.on('SIGTERM', signalCleanup);
+
+        let manifest: unityproj.IAssetBundleManifest;
 
         try {
             //=> Create project and temporary "sub project"
@@ -134,16 +146,18 @@ export class AssetsBundler {
             //=> Copy original assets and scripts into the project (Unity limitation)
             //-----------------------------------------------------------------------
             this.logger(`Copying assets to ${buildContext.assetsDir}`);
+
             await unityproj.copyAssetsInProject(buildContext, this.assetsStreams);
 
             this.logger(`Copying custom editor scripts to ${buildContext.editorScriptsDir}`);
+
             await unityproj.copyEditorScriptsInProject(buildContext, this.editorScriptsStreams);
 
             //=> Generate the asset bundle
             //----------------------------
             this.logger(`Generating asset bundle in ${buildContext.assetBundleDir}`);
 
-            await unityproj.generateAssetBundle(
+            manifest = await unityproj.generateAssetBundle(
                 buildContext,
                 this.assetsStreams,
                 this.buildOptions,
@@ -155,7 +169,12 @@ export class AssetsBundler {
             //=> Move the generated asset bundle to the final dest
             //----------------------------------------------------
             this.logger(`Moving asset bundle to target destination`);
-            await unityproj.moveGeneratedAssetBundle(buildContext, fileStream, overwrite);
+
+            await unityproj.moveGeneratedAssetBundle(
+                buildContext,
+                fileStream, manifestStream,
+                defaultedOptions.overwrite
+            );
         } finally {
             //=> Success or error doesn't matter, we have to cleanup!
             //-------------------------------------------------------
@@ -169,16 +188,21 @@ export class AssetsBundler {
         //------
         this.state = BundlerState.Dead;
         this.logger('Done.');
+
+        return manifest;
     }
 
     private async cleanup(context: BuildContext): Promise<void> {
         this.logger('Cleaning up the Unity project');
+
         await unityproj.cleanupProject(context);
     }
 
     private async signalCleanup(context: BuildContext): Promise<void> {
         await this.logger('AssetBundle conversion cancelled by user!');
+
         await this.cleanup(context);
+
         process.exit(0);
     }
 
