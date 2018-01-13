@@ -81,18 +81,28 @@ await bundle('/abs/path/to/fbx', '/abs/path/to/texture', /* ... */)
     // This is the "run" function and marks the termination of the fluent calls
     // by returning a Promise that resolves when the asset bundle generation ends.
     // Give it a path to the asset bundle name or a fs.WriteStream.
-    .to('/abs/path/to/assetbundle.bin');
+    .to('/abs/path/to/resources.assetbundle');
 ```
 
-(Not recommended) `bundle()` is the normal entry function but you can also use directly the underlying `AssetsBundler` class:
+You can also retrieve the manifest Unity generates during the build - the manifest contains informations about the asset bundle:
 
 ```typescript
-const bundler = new AssetsBundler();
+// The promise gets resolved with the manifest as a plain JS object
+const manifest = await bundle('...').to('...');
 
-await bundler
-    .includingAssets('/abs/path/to/fbx', '/abs/path/to/texture')
-    .targeting(WebGL)
-    .to('/abs/path/to/assetbundle.bin');
+/* manifest = { 
+    CRC: 2924050344,
+    Assets: ['Assets/CopiedAssets/MyAsset.jpg'],
+    ...etc...
+} */
+```
+
+You can also dump the original manifest file (a YAML file) alongside the assetbundle:
+
+```typescript
+const manifest = await bundle('...')
+    // manifestFile can take a path or a fs.WriteStream too
+    .to('/path/to/resources.assetbundle', { manifestFile: '/path/to/resources.assetbundle.manifest' });
 ```
 
 ## :bulb: Notes
