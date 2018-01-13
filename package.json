@@ -10,9 +10,10 @@
   "scripts": {
     "build": "yarn lint && tsc",
     "watch": "tsc -w",
-    "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post",
+    "semantic-release": "semantic-release",
     "test": "mocha \"dist/test/**/*.js\"",
-    "lint": "tslint -t verbose \"src/**/*.ts\" \"test/**/*.ts\""
+    "lint": "tslint -t verbose \"src/**/*.ts\" \"test/**/*.ts\"",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
@@ -22,9 +23,10 @@
     "@types/node": "^9.3.0",
     "chai": "^4.1.2",
     "mocha": "^4.1.0",
-    "semantic-release": "^6.3.2",
+    "semantic-release": "^11.0.2",
     "tslint": "^5.2.0",
-    "typescript": "~2.6.2"
+    "typescript": "~2.6.2",
+    "travis-deploy-once": "^4.3.1"
   },
   "dependencies": {
     "@mitm/unityinvoker": "^1.0.0",
