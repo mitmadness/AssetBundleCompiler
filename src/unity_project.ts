@@ -32,6 +32,7 @@ const CompilerScriptDest = path.resolve(`${ProjectDirectory}/Assets/Editor/Asset
 export async function shouldCreateProject(): Promise<boolean> {
     try {
         await fsx.access(ProjectDirectory, fsx.constants.R_OK | fsx.constants.W_OK);
+        await fsx.access(CompilerScriptDest, fsx.constants.R_OK | fsx.constants.W_OK);
         return false;
     } catch (err) {
         return true;
