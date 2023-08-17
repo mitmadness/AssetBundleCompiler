@@ -20,17 +20,21 @@
     "@types/fs-extra": "^5.0.0",
     "@types/js-yaml": "^3.10.1",
     "@types/mocha": "^2.2.40",
-    "@types/node": "^9.3.0",
+    "@types/node": "18",
     "chai": "^4.1.2",
     "mocha": "^4.1.0",
     "semantic-release": "^11.0.2",
+    "travis-deploy-once": "^4.3.1",
     "tslint": "^5.2.0",
-    "typescript": "~2.6.2",
-    "travis-deploy-once": "^4.3.1"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@mitm/unityinvoker": "^1.0.0",
     "fs-extra": "^5.0.0",
     "js-yaml": "^3.10.0"
+  },
+  "volta": {
+    "node": "18.17.1",
+    "yarn": "1.22.19"
   }
 }

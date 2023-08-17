@@ -2,6 +2,7 @@ import { logger } from '@mitm/unityinvoker';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { BuildContext } from './build_context';
+import { WebGL } from './build_targets';
 import * as streamMaker from './stream_maker';
 import * as unityproj from './unity_project';
 
@@ -47,7 +48,7 @@ export class AssetsBundler {
     private editorScriptsStreams: fs.ReadStream[] = [];
     private assetsStreams: fs.ReadStream[] = [];
     private buildOptions = new Set<string>();
-    private buildTarget: unityproj.BuildTarget;
+    private buildTarget: unityproj.BuildTarget = WebGL;
     private state = BundlerState.Configuring;
 
     public includingAssets(...assets: streamMaker.ReadableFileInput[]): this {
